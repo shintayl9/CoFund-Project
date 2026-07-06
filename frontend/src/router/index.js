@@ -4,6 +4,7 @@ import RegisterPage from '@/pages/RegisterPage.vue'
 import CampaignListPage from '@/pages/CampaignListPage.vue'
 import CampaignDetailPage from '@/pages/CampaignDetailPage.vue'
 import CreateCampaignPage from '@/pages/CreateCampaignPage.vue'
+import MyBackingsPage from '@/pages/MyBackingsPage.vue'
 
 const routes = [
     {
@@ -37,6 +38,11 @@ const routes = [
         component: {
             template: '<div class="p-8 text-2xl">Login berhasil! (halaman dummy sementara)</div>',
         },
+    },
+    {
+        path: '/my-backings',
+        name: 'my-backings',
+        component: MyBackingsPage,
     },
 ]
 

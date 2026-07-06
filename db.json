@@ -100,7 +100,7 @@
       "name": "Supporter",
       "min_amount": 150000,
       "quota": 50,
-      "remaining_quota": 30,
+      "remaining_quota": 29,
       "description": "Dapatkan 2 EcoBag + tote bag tambahan"
     },
     {
@@ -146,6 +146,14 @@
       "tier_id": null,
       "amount": 25000,
       "status": "completed"
+    },
+    {
+      "campaign_id": 1,
+      "user_id": 2,
+      "tier_id": 2,
+      "amount": 150000,
+      "status": "completed",
+      "id": 4
     }
   ],
   "users": [
