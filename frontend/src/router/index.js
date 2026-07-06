@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import LoginPage from '@/pages/LoginPage.vue'
 import RegisterPage from '@/pages/RegisterPage.vue'
+import CampaignListPage from '@/pages/CampaignListPage.vue'
+import CampaignDetailPage from '@/pages/CampaignDetailPage.vue'
 
 const routes = [
     {
@@ -12,6 +14,16 @@ const routes = [
         path: '/register',
         name: 'register',
         component: RegisterPage,
+    },
+    {
+        path: '/campaigns',
+        name: 'campaigns',
+        component: CampaignListPage,
+    },
+    {
+        path: '/campaigns/:id',
+        name: 'campaign-detail',
+        component: CampaignDetailPage,
     },
     {
         path: '/login-success',

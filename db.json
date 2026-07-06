@@ -1,0 +1,149 @@
+{
+    "campaigns": [
+        {
+            "id": 1,
+            "title": "EcoBag — Tas Daur Ulang",
+            "slug": "ecobag-tas-daur-ulang",
+            "description": "Tas ramah lingkungan dari bahan daur ulang plastik laut. Membantu mengurangi sampah plastik sekaligus memberikan lapangan kerja bagi pengrajin lokal.",
+            "target_amount": 5000000,
+            "collected_amount": 3200000,
+            "deadline": "2026-08-15",
+            "status": "active",
+            "category_id": 2,
+            "creator_id": 1,
+            "image": "https://placehold.co/600x400?text=EcoBag"
+        },
+        {
+            "id": 2,
+            "title": "Buku Cerita Anak Nusantara",
+            "slug": "buku-cerita-anak-nusantara",
+            "description": "Seri buku cerita bergambar yang mengangkat cerita rakyat dari berbagai daerah di Indonesia untuk anak usia 5-10 tahun.",
+            "target_amount": 8000000,
+            "collected_amount": 8500000,
+            "deadline": "2026-07-20",
+            "status": "success",
+            "category_id": 4,
+            "creator_id": 2,
+            "image": "https://placehold.co/600x400?text=Buku+Cerita"
+        },
+        {
+            "id": 3,
+            "title": "Kopi Robusta Petani Lokal",
+            "slug": "kopi-robusta-petani-lokal",
+            "description": "Mendukung petani kopi lokal dengan membeli hasil panen langsung tanpa perantara, kualitas premium harga bersahabat.",
+            "target_amount": 3000000,
+            "collected_amount": 950000,
+            "deadline": "2026-08-01",
+            "status": "active",
+            "category_id": 1,
+            "creator_id": 1,
+            "image": "https://placehold.co/600x400?text=Kopi+Robusta"
+        },
+        {
+            "id": 4,
+            "title": "Alat Musik Tradisional Digital",
+            "slug": "alat-musik-tradisional-digital",
+            "description": "Aplikasi pembelajaran alat musik tradisional (gamelan, angklung, sasando) berbasis digital untuk generasi muda.",
+            "target_amount": 15000000,
+            "collected_amount": 4200000,
+            "deadline": "2026-06-30",
+            "status": "failed",
+            "category_id": 3,
+            "creator_id": 3,
+            "image": "https://placehold.co/600x400?text=Alat+Musik"
+        }
+    ],
+    "categories": [
+        {
+            "id": 1,
+            "name": "Kuliner"
+        },
+        {
+            "id": 2,
+            "name": "Lingkungan"
+        },
+        {
+            "id": 3,
+            "name": "Teknologi"
+        },
+        {
+            "id": 4,
+            "name": "Pendidikan"
+        }
+    ],
+    "tiers": [
+        {
+            "id": 1,
+            "campaign_id": 1,
+            "name": "Early Bird",
+            "min_amount": 50000,
+            "quota": 100,
+            "remaining_quota": 62,
+            "description": "Dapatkan 1 EcoBag + stiker eksklusif"
+        },
+        {
+            "id": 2,
+            "campaign_id": 1,
+            "name": "Supporter",
+            "min_amount": 150000,
+            "quota": 50,
+            "remaining_quota": 30,
+            "description": "Dapatkan 2 EcoBag + tote bag tambahan"
+        },
+        {
+            "id": 3,
+            "campaign_id": 3,
+            "name": "Pecinta Kopi",
+            "min_amount": 100000,
+            "quota": 0,
+            "remaining_quota": 0,
+            "description": "Dapatkan 500gr kopi robusta premium"
+        }
+    ],
+    "backings": [
+        {
+            "id": 1,
+            "campaign_id": 1,
+            "user_id": 2,
+            "tier_id": 1,
+            "amount": 50000,
+            "status": "completed"
+        },
+        {
+            "id": 2,
+            "campaign_id": 1,
+            "user_id": 3,
+            "tier_id": 2,
+            "amount": 150000,
+            "status": "completed"
+        },
+        {
+            "id": 3,
+            "campaign_id": 3,
+            "user_id": 2,
+            "tier_id": null,
+            "amount": 25000,
+            "status": "completed"
+        }
+    ],
+    "users": [
+        {
+            "id": 1,
+            "name": "Budi Santoso",
+            "email": "budi@mail.com",
+            "role": "creator"
+        },
+        {
+            "id": 2,
+            "name": "Alice Wijaya",
+            "email": "alice@mail.com",
+            "role": "backer"
+        },
+        {
+            "id": 3,
+            "name": "Citra Dewi",
+            "email": "citra@mail.com",
+            "role": "backer"
+        }
+    ]
+}
