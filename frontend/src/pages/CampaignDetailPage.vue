@@ -58,13 +58,17 @@ async function confirmBacking() {
 
         await campaignService.createBacking({
             campaign_id: campaign.value.id,
-            user_id: 2, // sementara hardcode, nanti diganti dengan user yang sedang login
+            user_id: 2,
             tier_id: tier ? tier.id : null,
             amount: amount,
             status: 'completed',
         })
 
-        campaign.value.collected_amount += amount
+        const newAmount = campaign.value.collected_amount + amount
+        await campaignService.updateCampaignAmount(campaign.value.id, {
+            collected_amount: newAmount,
+        })
+        campaign.value.collected_amount = newAmount
 
         if (tier) {
             await campaignService.updateTierQuota(tier.id, {
@@ -135,7 +139,7 @@ function getUserName(userId) {
                 <p class="text-xl font-semibold mt-2">
                     {{ formatCurrency(campaign.collected_amount) }}
                     <span class="text-gray-400 font-normal text-base">/ target {{ formatCurrency(campaign.target_amount)
-                        }}</span>
+                    }}</span>
                 </p>
             </div>
 

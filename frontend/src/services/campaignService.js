@@ -11,4 +11,7 @@ export const campaignService = {
     createBacking: (data) => api.post('/backings', data),
     updateTierQuota: (tierId, data) => api.patch(`/tiers/${tierId}`, data),
     getBackingsByUser: (userId) => api.get('/backings', { params: { user_id: userId } }),
+    getCampaignsByCreator: (creatorId) => api.get('/campaigns', { params: { creator_id: creatorId } }),
+    updateCampaignAmount: (campaignId, data) => api.patch(`/campaigns/${campaignId}`, data),
+    getUserById: (userId) => api.get(`/users/${userId}`),
 }

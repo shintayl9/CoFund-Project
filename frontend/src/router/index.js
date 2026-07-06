@@ -5,6 +5,7 @@ import CampaignListPage from '@/pages/CampaignListPage.vue'
 import CampaignDetailPage from '@/pages/CampaignDetailPage.vue'
 import CreateCampaignPage from '@/pages/CreateCampaignPage.vue'
 import MyBackingsPage from '@/pages/MyBackingsPage.vue'
+import CreatorDashboardPage from '@/pages/CreatorDashboardPage.vue'
 
 const routes = [
     {
@@ -43,6 +44,11 @@ const routes = [
         path: '/my-backings',
         name: 'my-backings',
         component: MyBackingsPage,
+    },
+    {
+        path: '/dashboard/creator',
+        name: 'creator-dashboard',
+        component: CreatorDashboardPage,
     },
 ]
 

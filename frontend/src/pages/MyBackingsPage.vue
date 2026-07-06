@@ -5,7 +5,7 @@ import dayjs from 'dayjs'
 
 const CURRENT_USER_ID = 2
 
-const { myBackings, isLoading, fetchMyBackings } = useMyBackings()
+const { myBackings, currentUser, isLoading, fetchMyBackings } = useMyBackings()
 
 onMounted(() => {
     fetchMyBackings(CURRENT_USER_ID)
@@ -34,10 +34,17 @@ const totalDonated = () => {
 <template>
     <div class="min-h-screen bg-gray-50 p-8">
         <div class="max-w-3xl mx-auto">
-            <h1 class="text-2xl font-bold mb-2">Riwayat Backing Saya</h1>
-            <p class="text-gray-500 mb-6">
-                Total donasi: <span class="font-semibold text-gray-700">{{ formatCurrency(totalDonated()) }}</span>
-            </p>
+            <h1 class="text-2xl font-bold mb-2">Dashboard Backer</h1>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div class="bg-white rounded-lg shadow-md p-4">
+                    <p class="text-sm text-gray-500">Saldo Saya</p>
+                    <p class="text-2xl font-bold">{{ formatCurrency(currentUser?.balance || 0) }}</p>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-4">
+                    <p class="text-sm text-gray-500">Total Donasi</p>
+                    <p class="text-2xl font-bold">{{ formatCurrency(totalDonated()) }}</p>
+                </div>
+            </div>
 
             <div v-if="isLoading" class="text-gray-500">Memuat data...</div>
 
