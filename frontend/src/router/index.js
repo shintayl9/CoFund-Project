@@ -3,6 +3,7 @@ import LoginPage from '@/pages/LoginPage.vue'
 import RegisterPage from '@/pages/RegisterPage.vue'
 import CampaignListPage from '@/pages/CampaignListPage.vue'
 import CampaignDetailPage from '@/pages/CampaignDetailPage.vue'
+import CreateCampaignPage from '@/pages/CreateCampaignPage.vue'
 
 const routes = [
     {
@@ -19,6 +20,11 @@ const routes = [
         path: '/campaigns',
         name: 'campaigns',
         component: CampaignListPage,
+    },
+    {
+        path: '/campaigns/create',
+        name: 'campaign-create',
+        component: CreateCampaignPage,
     },
     {
         path: '/campaigns/:id',
