@@ -4,6 +4,7 @@ import { useCampaign } from '@/composables/useCampaign'
 import dayjs from 'dayjs'
 import InputText from 'primevue/inputtext'
 import Select from 'primevue/select'
+import Skeleton from 'primevue/skeleton'
 
 const { campaigns, isLoading, fetchAll } = useCampaign()
 
@@ -77,7 +78,22 @@ function formatCurrency(value) {
                 placeholder="Status" class="w-full md:w-52" />
         </div>
 
-        <div v-if="isLoading" class="text-gray-500">Memuat data...</div>
+        <div v-if="isLoading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div v-for="n in 6" :key="n" class="bg-white rounded-lg shadow-md overflow-hidden">
+                <Skeleton height="10rem" />
+                <div class="p-4 flex flex-col gap-2">
+                    <Skeleton width="4rem" height="1.2rem" />
+                    <Skeleton width="80%" height="1.5rem" />
+                    <Skeleton width="100%" height="2.5rem" />
+                    <Skeleton width="100%" height="0.5rem" class="mt-2" />
+                </div>
+            </div>
+        </div>
+
+        <div v-else-if="filteredCampaigns.length === 0" class="text-center text-gray-500 py-12">
+            <i class="pi pi-inbox text-4xl mb-3 block"></i>
+            <p>Tidak ada kampanye yang cocok dengan pencarian/filter kamu.</p>
+        </div>
 
         <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <router-link v-for="item in filteredCampaigns" :key="item.id" :to="`/campaigns/${item.id}`"

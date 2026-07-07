@@ -9,6 +9,7 @@ import Dialog from 'primevue/dialog'
 import RadioButton from 'primevue/radiobutton'
 import InputNumber from 'primevue/inputnumber'
 import { campaignService } from '@/services/campaignService'
+import Skeleton from 'primevue/skeleton'
 
 const route = useRoute()
 const { campaign, tiers, backings, users, isLoading, fetchOne, fetchTiers, fetchBackings, fetchUsers } = useCampaign()
@@ -120,7 +121,24 @@ function getUserName(userId) {
 
 <template>
     <div class="min-h-screen bg-gray-50 p-8">
-        <div v-if="isLoading" class="text-gray-500">Memuat data...</div>
+        <div v-if="isLoading" class="max-w-4xl mx-auto">
+            <Skeleton height="16rem" class="mb-6" />
+            <Skeleton width="60%" height="2rem" class="mb-2" />
+            <Skeleton width="100%" height="4rem" class="mb-6" />
+
+            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                <Skeleton height="0.75rem" class="mb-2" />
+                <Skeleton width="50%" height="1.5rem" />
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <Skeleton width="30%" height="1.5rem" class="mb-4" />
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <Skeleton height="6rem" />
+                    <Skeleton height="6rem" />
+                </div>
+            </div>
+        </div>
 
         <div v-else-if="campaign" class="max-w-4xl mx-auto">
             <img :src="campaign.image" :alt="campaign.title" class="w-full h-64 object-cover rounded-lg mb-6" />

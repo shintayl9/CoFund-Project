@@ -64,6 +64,32 @@
       "creator_id": 1,
       "image": "https://crownhoreca.com/wp-content/uploads/2026/03/Peralatan-Masak-MBG.webp",
       "id": 5
+    },
+    {
+      "title": "Indomie – “Gak Ada Lawan”",
+      "slug": "indomie-–-“gak-ada-lawan”",
+      "description": "Indomie meluncurkan kampanye yang bermain dengan tren lokal dan budaya internet di Indonesia, menggunakan humor dan konten yang bisa “dirangkul” oleh banyak orang.",
+      "target_amount": 50000000,
+      "collected_amount": 10500000,
+      "deadline": "2026-08-31",
+      "status": "active",
+      "category_id": 1,
+      "creator_id": 1,
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQakoIEILRX4MRiRSBC_iJjGyT816bcEqyW7q0SbKnoSg&s=10",
+      "id": 6
+    },
+    {
+      "title": "GoJek – “Pesan dari Rumah”",
+      "slug": "gojek-–-“pesan-dari-rumah”",
+      "description": "Di masa pandemi, GoJek menjalankan kampanye “Pesan dari Rumah” yang sangat relevan dengan kondisi masyarakat ketika itu, dan membantu brand tetap aktif di media sosial dengan pesan yang resonan.",
+      "target_amount": 46000000,
+      "collected_amount": 1500000,
+      "deadline": "2026-08-22",
+      "status": "draft",
+      "category_id": 3,
+      "creator_id": 1,
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMwi6mvxOeqmfBVSESouwrNCOGLpQHsVvfKPn9xSw5nAff4Vy6TnIytpvv&s=10",
+      "id": 7
     }
   ],
   "categories": [
@@ -120,6 +146,42 @@
       "remaining_quota": 3,
       "description": "Tambahan Reward",
       "id": 4
+    },
+    {
+      "campaign_id": 6,
+      "name": "Premium",
+      "min_amount": 500000,
+      "quota": 10,
+      "remaining_quota": 9,
+      "description": "Donasi minimal Rp 500.000, dapat produk + merchandise eksklusif",
+      "id": 5
+    },
+    {
+      "campaign_id": 6,
+      "name": "Supporter",
+      "min_amount": 200000,
+      "quota": 20,
+      "remaining_quota": 20,
+      "description": "Donasi minimal Rp 200.000, dapat 2 produk + tote bag",
+      "id": 6
+    },
+    {
+      "campaign_id": 6,
+      "name": "Early Bird",
+      "min_amount": 70000,
+      "quota": 30,
+      "remaining_quota": 30,
+      "description": "Donasi minimal Rp 70.000, dapat 1 produk + stiker",
+      "id": 7
+    },
+    {
+      "campaign_id": 7,
+      "name": "Premium",
+      "min_amount": 500000,
+      "quota": 20,
+      "remaining_quota": 19,
+      "description": "Mendapatkan mercandise premium minimal donasi Rp. 500.000",
+      "id": 8
     }
   ],
   "backings": [
@@ -194,6 +256,38 @@
       "amount": 9000000,
       "status": "completed",
       "id": 9
+    },
+    {
+      "campaign_id": 6,
+      "user_id": 2,
+      "tier_id": 5,
+      "amount": 500000,
+      "status": "completed",
+      "id": 10
+    },
+    {
+      "campaign_id": 7,
+      "user_id": 2,
+      "tier_id": 8,
+      "amount": 500000,
+      "status": "completed",
+      "id": 11
+    },
+    {
+      "campaign_id": 7,
+      "user_id": 2,
+      "tier_id": null,
+      "amount": 1000000,
+      "status": "completed",
+      "id": 12
+    },
+    {
+      "campaign_id": 6,
+      "user_id": 2,
+      "tier_id": null,
+      "amount": 10000000,
+      "status": "completed",
+      "id": 13
     }
   ],
   "users": [
@@ -211,7 +305,7 @@
       "email": "alice@mail.com",
       "role": "backer",
       "balance": 0,
-      "is_suspended": true
+      "is_suspended": false
     },
     {
       "id": 3,

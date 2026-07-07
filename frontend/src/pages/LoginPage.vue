@@ -36,7 +36,7 @@ const onSubmit = handleSubmit(async (values) => {
   try {
     const res = await authService.login(values);
     toast.success(res.message);
-    router.push("/login-success");
+    router.push("/campaigns");
   } catch (error) {
     toast.error("Login gagal, coba lagi");
   } finally {
@@ -53,27 +53,14 @@ const onSubmit = handleSubmit(async (values) => {
       <form @submit="onSubmit" class="flex flex-col gap-4">
         <div class="flex flex-col gap-1">
           <label for="email" class="text-sm font-medium">Email</label>
-          <InputText
-            id="email"
-            v-model="email"
-            placeholder="nama@email.com"
-            autocomplete="email"
-          />
+          <InputText id="email" v-model="email" placeholder="nama@email.com" autocomplete="email" />
           <small v-if="emailError" class="text-red-500">{{ emailError }}</small>
         </div>
 
         <div class="flex flex-col gap-1">
           <label for="password" class="text-sm font-medium">Password</label>
-          <Password
-            id="password"
-            v-model="password"
-            :feedback="false"
-            toggleMask
-            placeholder="Minimal 8 karakter"
-            class="w-full"
-            inputClass="w-full"
-            autocomplete="current-password"
-          />
+          <Password id="password" v-model="password" :feedback="false" toggleMask placeholder="Minimal 8 karakter"
+            class="w-full" inputClass="w-full" autocomplete="current-password" />
           <small v-if="passwordError" class="text-red-500">{{
             passwordError
           }}</small>
@@ -83,10 +70,7 @@ const onSubmit = handleSubmit(async (values) => {
       </form>
       <p class="text-sm text-center mt-4 text-gray-600">
         Belum punya akun?
-        <router-link
-          to="/register"
-          class="text-blue-600 font-medium hover:underline"
-        >
+        <router-link to="/register" class="text-blue-600 font-medium hover:underline">
           Register di sini
         </router-link>
       </p>

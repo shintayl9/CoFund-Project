@@ -39,7 +39,7 @@ async function handleToggleSuspend(user) {
 
             <div v-else class="bg-white rounded-lg shadow-md overflow-hidden">
                 <div v-for="user in users" :key="user.id"
-                    class="flex items-center justify-between p-4 border-b last:border-b-0">
+                    class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 border-b last:border-b-0">
                     <div>
                         <div class="flex items-center gap-2">
                             <p class="font-medium">{{ user.name }}</p>
