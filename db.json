@@ -85,7 +85,7 @@
       "target_amount": 46000000,
       "collected_amount": 1500000,
       "deadline": "2026-08-22",
-      "status": "draft",
+      "status": "review",
       "category_id": 3,
       "creator_id": 1,
       "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMwi6mvxOeqmfBVSESouwrNCOGLpQHsVvfKPn9xSw5nAff4Vy6TnIytpvv&s=10",
@@ -295,6 +295,7 @@
       "id": 1,
       "name": "Budi Santoso",
       "email": "budi@mail.com",
+      "password": "password123",
       "role": "creator",
       "balance": 0,
       "is_suspended": false
@@ -303,6 +304,7 @@
       "id": 2,
       "name": "Alice Wijaya",
       "email": "alice@mail.com",
+      "password": "password123",
       "role": "backer",
       "balance": 0,
       "is_suspended": false
@@ -311,7 +313,17 @@
       "id": 3,
       "name": "Citra Dewi",
       "email": "citra@mail.com",
+      "password": "password123",
       "role": "backer",
+      "balance": 0,
+      "is_suspended": false
+    },
+    {
+      "id": 4,
+      "name": "Admin CoFund",
+      "email": "admin@mail.com",
+      "password": "password123",
+      "role": "admin",
       "balance": 0,
       "is_suspended": false
     }

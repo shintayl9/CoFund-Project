@@ -8,9 +8,11 @@ import { useToast } from "vue-toastification";
 import { authService } from "@/services/authService";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { useAuthStore } from '@/stores/useAuthStore'
 
 const toast = useToast();
 const router = useRouter();
+const authStore = useAuthStore();
 const isLoading = ref(false);
 
 const schema = yup.object({
@@ -35,10 +37,18 @@ const onSubmit = handleSubmit(async (values) => {
   isLoading.value = true;
   try {
     const res = await authService.login(values);
+    authStore.setUser(res.user);
     toast.success(res.message);
-    router.push("/campaigns");
+
+    if (res.user.role === 'admin') {
+      router.push("/admin/approval");
+    } else if (res.user.role === 'creator') {
+      router.push("/dashboard/creator");
+    } else {
+      router.push("/campaigns");
+    }
   } catch (error) {
-    toast.error("Login gagal, coba lagi");
+    toast.error(error.message || "Login gagal, coba lagi");
   } finally {
     isLoading.value = false;
   }

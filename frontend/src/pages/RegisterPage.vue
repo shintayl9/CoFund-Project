@@ -46,7 +46,7 @@ const onSubmit = handleSubmit(async (values) => {
     toast.success(res.message);
     router.push("/login");
   } catch (error) {
-    toast.error("Register gagal, coba lagi");
+    toast.error(error.message || "Register gagal, coba lagi");
   } finally {
     isLoading.value = false;
   }
@@ -61,76 +61,39 @@ const onSubmit = handleSubmit(async (values) => {
       <form @submit="onSubmit" class="flex flex-col gap-4">
         <div class="flex flex-col gap-1">
           <label for="name" class="text-sm font-medium">Nama</label>
-          <InputText
-            id="name"
-            v-model="name"
-            placeholder="Nama lengkap"
-            class="w-full"
-            autocomplete="name"
-          />
+          <InputText id="name" v-model="name" placeholder="Nama lengkap" class="w-full" autocomplete="name" />
           <small v-if="nameError" class="text-red-500">{{ nameError }}</small>
         </div>
 
         <div class="flex flex-col gap-1">
           <label for="email" class="text-sm font-medium">Email</label>
-          <InputText
-            id="email"
-            v-model="email"
-            placeholder="nama@email.com"
-            class="w-full"
-            autocomplete="email"
-          />
+          <InputText id="email" v-model="email" placeholder="nama@email.com" class="w-full" autocomplete="email" />
           <small v-if="emailError" class="text-red-500">{{ emailError }}</small>
         </div>
 
         <div class="flex flex-col gap-1">
           <label for="password" class="text-sm font-medium">Password</label>
-          <Password
-            id="password"
-            v-model="password"
-            toggleMask
-            placeholder="Minimal 8 karakter"
-            class="w-full"
-            inputClass="w-full"
-            autocomplete="new-password"
-          />
+          <Password id="password" v-model="password" toggleMask placeholder="Minimal 8 karakter" class="w-full"
+            inputClass="w-full" autocomplete="new-password" />
           <small v-if="passwordError" class="text-red-500">{{
             passwordError
           }}</small>
         </div>
 
         <div class="flex flex-col gap-1">
-          <label for="confirmPassword" class="text-sm font-medium"
-            >Konfirmasi Password</label
-          >
-          <Password
-            id="confirmPassword"
-            v-model="confirmPassword"
-            :feedback="false"
-            toggleMask
-            placeholder="Ulangi password"
-            class="w-full"
-            inputClass="w-full"
-            autocomplete="new-password"
-          />
+          <label for="confirmPassword" class="text-sm font-medium">Konfirmasi Password</label>
+          <Password id="confirmPassword" v-model="confirmPassword" :feedback="false" toggleMask
+            placeholder="Ulangi password" class="w-full" inputClass="w-full" autocomplete="new-password" />
           <small v-if="confirmPasswordError" class="text-red-500">{{
             confirmPasswordError
           }}</small>
         </div>
 
-        <Button
-          type="submit"
-          label="Register"
-          class="mt-2"
-          :loading="isLoading"
-        />
+        <Button type="submit" label="Register" class="mt-2" :loading="isLoading" />
       </form>
       <p class="text-sm text-center mt-4 text-gray-600">
         Sudah punya akun?
-        <router-link
-          to="/login"
-          class="text-blue-600 font-medium hover:underline"
-        >
+        <router-link to="/login" class="text-blue-600 font-medium hover:underline">
           Login di sini
         </router-link>
       </p>

@@ -1,4 +1,6 @@
 <script setup>
+import { useAuthStore } from '@/stores/useAuthStore'
+import { useRouter } from 'vue-router'
 import { onMounted, ref } from 'vue'
 import { useNotifications } from '@/composables/useNotifications'
 import Button from 'primevue/button'
@@ -6,6 +8,13 @@ import OverlayPanel from 'primevue/overlaypanel'
 
 const { notifications, unreadCount, fetchNotifications, markAsRead } = useNotifications()
 const overlayPanel = ref(null)
+const authStore = useAuthStore()
+const router = useRouter()
+
+function handleLogout() {
+    authStore.logout()
+    router.push('/login')
+}
 const showMobileMenu = ref(false)
 
 onMounted(() => {
@@ -46,6 +55,11 @@ async function handleClickNotification(notif) {
                 <button class="md:hidden" @click="showMobileMenu = !showMobileMenu">
                     <i class="pi pi-bars text-xl text-gray-600"></i>
                 </button>
+
+                <div v-if="authStore.isLoggedIn" class="hidden md:flex items-center gap-2">
+                    <span class="text-sm text-gray-600">{{ authStore.user.name }}</span>
+                    <Button label="Logout" size="small" severity="secondary" @click="handleLogout" />
+                </div>
 
                 <OverlayPanel ref="overlayPanel" class="w-80">
                     <div class="flex flex-col gap-2 max-h-80 overflow-y-auto">

@@ -1,4 +1,5 @@
 <script setup>
+import { useAuthStore } from '@/stores/useAuthStore'
 import { onMounted, computed } from 'vue'
 import { useCreatorDashboard } from '@/composables/useCreatorDashboard'
 import { Line } from 'vue-chartjs'
@@ -18,21 +19,21 @@ import dayjs from 'dayjs'
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend)
 
-const CURRENT_CREATOR_ID = 1
+const authStore = useAuthStore()
 
 const { myCampaigns, isLoading, fetchDashboard, totalCollected, totalBackers, totalCampaigns } = useCreatorDashboard()
 
 const toast = useToast()
 
 onMounted(() => {
-    fetchDashboard(CURRENT_CREATOR_ID)
+    fetchDashboard(authStore.user.id)
 })
 
 async function submitForReview(campaignId) {
     try {
         await campaignService.updateStatus(campaignId, 'review')
         toast.success('Kampanye berhasil disubmit untuk review')
-        fetchDashboard(CURRENT_CREATOR_ID)
+        fetchDashboard(authStore.user.id)
     } catch (error) {
         toast.error('Gagal submit kampanye')
     }

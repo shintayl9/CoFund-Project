@@ -1,14 +1,15 @@
 <script setup>
+import { useAuthStore } from '@/stores/useAuthStore'
 import { onMounted } from 'vue'
 import { useMyBackings } from '@/composables/useMyBackings'
 import dayjs from 'dayjs'
 
-const CURRENT_USER_ID = 2
+const authStore = useAuthStore()
 
 const { myBackings, currentUser, isLoading, fetchMyBackings } = useMyBackings()
 
 onMounted(() => {
-    fetchMyBackings(CURRENT_USER_ID)
+    fetchMyBackings(authStore.user.id)
 })
 
 function formatCurrency(value) {
