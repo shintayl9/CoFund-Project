@@ -41,8 +41,23 @@ async function handleClickNotification(notif) {
                 <router-link to="/campaigns"
                     class="hidden md:inline text-sm text-gray-600 hover:text-gray-900">Kampanye</router-link>
                 <router-link to="/my-backings"
-                    class="hidden md:inline text-sm text-gray-600 hover:text-gray-900">Dashboard
-                    Saya</router-link>
+                    class="hidden md:inline text-sm text-gray-600 hover:text-gray-900">Dashboard Saya</router-link>
+                <router-link v-if="authStore.user?.role === 'creator'" to="/campaigns/create"
+                    class="hidden md:inline text-sm text-gray-600 hover:text-gray-900">
+                    Buat Kampanye
+                </router-link>
+                <router-link v-if="authStore.user?.role === 'admin'" to="/admin/approval"
+                    class="hidden md:inline text-sm text-gray-600 hover:text-gray-900">
+                    Approval
+                </router-link>
+                <router-link v-if="authStore.user?.role === 'admin'" to="/admin/users"
+                    class="hidden md:inline text-sm text-gray-600 hover:text-gray-900">
+                    User
+                </router-link>
+                <router-link v-if="authStore.user?.role === 'admin'" to="/admin/overview"
+                    class="hidden md:inline text-sm text-gray-600 hover:text-gray-900">
+                    Overview
+                </router-link>
 
                 <button class="relative" @click="toggleNotifications">
                     <i class="pi pi-bell text-xl text-gray-600"></i>
@@ -80,6 +95,22 @@ async function handleClickNotification(notif) {
                 @click="showMobileMenu = false">Kampanye</router-link>
             <router-link to="/my-backings" class="text-sm text-gray-600 py-1" @click="showMobileMenu = false">Dashboard
                 Saya</router-link>
+            <router-link v-if="authStore.user?.role === 'creator'" to="/campaigns/create"
+                class="text-sm text-gray-600 py-1" @click="showMobileMenu = false">
+                Buat Kampanye
+            </router-link>
+            <router-link v-if="authStore.user?.role === 'admin'" to="/admin/approval" class="text-sm text-gray-600 py-1"
+                @click="showMobileMenu = false">
+                Approval
+            </router-link>
+            <router-link v-if="authStore.user?.role === 'admin'" to="/admin/users" class="text-sm text-gray-600 py-1"
+                @click="showMobileMenu = false">
+                User
+            </router-link>
+            <router-link v-if="authStore.user?.role === 'admin'" to="/admin/overview" class="text-sm text-gray-600 py-1"
+                @click="showMobileMenu = false">
+                Overview
+            </router-link>
         </div>
     </nav>
 </template>

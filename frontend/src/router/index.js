@@ -9,6 +9,7 @@ import MyBackingsPage from '@/pages/MyBackingsPage.vue'
 import CreatorDashboardPage from '@/pages/CreatorDashboardPage.vue'
 import AdminApprovalPage from '@/pages/AdminApprovalPage.vue'
 import AdminUsersPage from '@/pages/AdminUsersPage.vue'
+import AdminOverviewPage from '@/pages/AdminOverviewPage.vue'
 
 const routes = [
     {
@@ -66,6 +67,12 @@ const routes = [
         path: '/admin/users',
         name: 'admin-users',
         component: AdminUsersPage,
+        meta: { requiresAdmin: true },
+    },
+    {
+        path: '/admin/overview',
+        name: 'admin-overview',
+        component: AdminOverviewPage,
         meta: { requiresAdmin: true },
     },
 ]

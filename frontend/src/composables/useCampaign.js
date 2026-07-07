@@ -6,6 +6,7 @@ export function useCampaign() {
     const campaign = ref(null)
     const tiers = ref([])
     const backings = ref([])
+    const updates = ref([])
     const users = ref([])
     const isLoading = ref(false)
 
@@ -39,13 +40,27 @@ export function useCampaign() {
         backings.value = res.data
     }
 
+    async function fetchUpdates(campaignId) {
+        const res = await campaignService.getUpdatesByCampaign(campaignId)
+        updates.value = res.data
+    }
+
+    async function postUpdate(campaignId, message) {
+        await campaignService.createUpdate({
+            campaign_id: campaignId,
+            message,
+            created_at: new Date().toISOString().split('T')[0],
+        })
+        await fetchUpdates(campaignId)
+    }
+
     async function fetchUsers() {
         const res = await campaignService.getUsers()
         users.value = res.data
     }
 
     return {
-        campaigns, campaign, tiers, backings, users, isLoading,
-        fetchAll, fetchOne, fetchTiers, fetchBackings, fetchUsers,
+        campaigns, campaign, tiers, backings, users, updates, isLoading,
+        fetchAll, fetchOne, fetchTiers, fetchBackings, fetchUsers, fetchUpdates, postUpdate,
     }
 }

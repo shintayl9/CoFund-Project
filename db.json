@@ -32,7 +32,7 @@
       "slug": "kopi-robusta-petani-lokal",
       "description": "Mendukung petani kopi lokal dengan membeli hasil panen langsung tanpa perantara, kualitas premium harga bersahabat.",
       "target_amount": 3000000,
-      "collected_amount": 950000,
+      "collected_amount": 1050000,
       "deadline": "2026-08-01",
       "status": "active",
       "category_id": 1,
@@ -85,7 +85,7 @@
       "target_amount": 46000000,
       "collected_amount": 1500000,
       "deadline": "2026-08-22",
-      "status": "review",
+      "status": "active",
       "category_id": 3,
       "creator_id": 1,
       "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMwi6mvxOeqmfBVSESouwrNCOGLpQHsVvfKPn9xSw5nAff4Vy6TnIytpvv&s=10",
@@ -135,7 +135,7 @@
       "name": "Pecinta Kopi",
       "min_amount": 100000,
       "quota": 0,
-      "remaining_quota": 0,
+      "remaining_quota": -1,
       "description": "Dapatkan 500gr kopi robusta premium"
     },
     {
@@ -288,6 +288,14 @@
       "amount": 10000000,
       "status": "completed",
       "id": 13
+    },
+    {
+      "campaign_id": 3,
+      "user_id": 1,
+      "tier_id": 3,
+      "amount": 100000,
+      "status": "completed",
+      "id": 14
     }
   ],
   "users": [
@@ -349,6 +357,14 @@
       "message": "Deadline kampanye 'Kopi Robusta' tinggal 3 hari lagi",
       "is_read": true,
       "created_at": "2026-07-04"
+    }
+  ],
+  "campaign_updates": [
+    {
+      "campaign_id": 3,
+      "message": "Tes",
+      "created_at": "2026-07-07",
+      "id": 1
     }
   ]
 }

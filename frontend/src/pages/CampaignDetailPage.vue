@@ -1,5 +1,7 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { useAuthStore } from '@/stores/useAuthStore'
+import Textarea from 'primevue/textarea'
+import { onMounted, ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useCampaign } from '@/composables/useCampaign'
 import { useToast } from 'vue-toastification'
@@ -12,13 +14,37 @@ import { campaignService } from '@/services/campaignService'
 import Skeleton from 'primevue/skeleton'
 
 const route = useRoute()
-const { campaign, tiers, backings, users, isLoading, fetchOne, fetchTiers, fetchBackings, fetchUsers } = useCampaign()
+const authStore = useAuthStore()
+const {
+    campaign, tiers, backings, users, updates, isLoading,
+    fetchOne, fetchTiers, fetchBackings, fetchUsers, fetchUpdates, postUpdate,
+} = useCampaign()
 
 const showBackingDialog = ref(false)
 const backingMode = ref('tier')
 const selectedTierId = ref(null)
 const customAmount = ref(0)
 const toast = useToast()
+
+const isOwner = computed(() => campaign.value?.creator_id === authStore.user?.id)
+
+const showUpdateDialog = ref(false)
+const updateMessage = ref('')
+
+async function handlePostUpdate() {
+    if (!updateMessage.value.trim()) {
+        toast.error('Isi update tidak boleh kosong')
+        return
+    }
+    try {
+        await postUpdate(campaign.value.id, updateMessage.value)
+        toast.success('Update berhasil diposting')
+        showUpdateDialog.value = false
+        updateMessage.value = ''
+    } catch (error) {
+        toast.error('Gagal posting update')
+    }
+}
 
 function openBackingDialog() {
     backingMode.value = 'tier'
@@ -59,7 +85,7 @@ async function confirmBacking() {
 
         await campaignService.createBacking({
             campaign_id: campaign.value.id,
-            user_id: 2,
+            user_id: authStore.user.id,
             tier_id: tier ? tier.id : null,
             amount: amount,
             status: 'completed',
@@ -95,6 +121,7 @@ onMounted(() => {
     fetchTiers(id)
     fetchBackings(id)
     fetchUsers()
+    fetchUpdates(id)
 })
 
 function getProgress() {
@@ -116,7 +143,6 @@ function getUserName(userId) {
     const user = users.value.find((u) => u.id === userId)
     return user ? user.name : `User #${userId}`
 }
-
 </script>
 
 <template>
@@ -143,7 +169,11 @@ function getUserName(userId) {
         <div v-else-if="campaign" class="max-w-4xl mx-auto">
             <img :src="campaign.image" :alt="campaign.title" class="w-full h-64 object-cover rounded-lg mb-6" />
 
-            <h1 class="text-3xl font-bold mb-2">{{ campaign.title }}</h1>
+            <div class="flex justify-between items-start gap-4 mb-2">
+                <h1 class="text-3xl font-bold">{{ campaign.title }}</h1>
+                <Button v-if="isOwner && campaign.status === 'active'" label="Post Update" size="small"
+                    severity="secondary" @click="showUpdateDialog = true" />
+            </div>
             <p class="text-gray-600 mb-6">{{ campaign.description }}</p>
 
             <div class="bg-white rounded-lg shadow-md p-6 mb-6">
@@ -177,6 +207,17 @@ function getUserName(userId) {
                 </div>
             </div>
 
+            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                <h2 class="text-xl font-semibold mb-4">Update Kampanye</h2>
+                <div v-if="updates.length === 0" class="text-gray-500">Belum ada update dari creator.</div>
+                <ul v-else class="flex flex-col gap-3">
+                    <li v-for="update in updates" :key="update.id" class="border-l-4 border-green-500 pl-3">
+                        <p class="text-sm text-gray-800">{{ update.message }}</p>
+                        <p class="text-xs text-gray-400 mt-1">{{ update.created_at }}</p>
+                    </li>
+                </ul>
+            </div>
+
             <div class="bg-white rounded-lg shadow-md p-6">
                 <h2 class="text-xl font-semibold mb-4">Daftar Backer</h2>
                 <div v-if="backings.length === 0" class="text-gray-500">Belum ada yang mendukung kampanye ini.</div>
@@ -191,6 +232,7 @@ function getUserName(userId) {
 
         <div v-else class="text-gray-500">Kampanye tidak ditemukan.</div>
     </div>
+
     <Dialog v-model:visible="showBackingDialog" header="Dukung Kampanye" modal class="w-full max-w-md">
         <div class="flex flex-col gap-4">
             <div class="flex flex-col gap-2">
@@ -229,6 +271,7 @@ function getUserName(userId) {
             <Button label="Lanjutkan" class="mt-2" @click="proceedToConfirm" />
         </div>
     </Dialog>
+
     <Dialog v-model:visible="showConfirmDialog" header="Konfirmasi Pembayaran" modal class="w-full max-w-md">
         <div class="flex flex-col gap-4">
             <div class="bg-gray-50 rounded-lg p-4">
@@ -254,6 +297,18 @@ function getUserName(userId) {
                 <Button label="Kembali" severity="secondary" :disabled="isProcessingPayment"
                     @click="showConfirmDialog = false; showBackingDialog = true" />
                 <Button label="Konfirmasi & Bayar" :loading="isProcessingPayment" @click="confirmBacking" />
+            </div>
+        </div>
+    </Dialog>
+
+    <Dialog v-model:visible="showUpdateDialog" header="Post Update Kampanye" modal class="w-full max-w-md">
+        <div class="flex flex-col gap-3">
+            <label class="text-sm font-medium">Isi Update</label>
+            <Textarea v-model="updateMessage" rows="4" placeholder="Tulis update terbaru untuk backer..."
+                class="w-full" />
+            <div class="flex justify-end gap-2 mt-2">
+                <Button label="Batal" severity="secondary" @click="showUpdateDialog = false" />
+                <Button label="Posting" @click="handlePostUpdate" />
             </div>
         </div>
     </Dialog>
