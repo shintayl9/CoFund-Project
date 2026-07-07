@@ -14,4 +14,10 @@ export const campaignService = {
     getCampaignsByCreator: (creatorId) => api.get('/campaigns', { params: { creator_id: creatorId } }),
     updateCampaignAmount: (campaignId, data) => api.patch(`/campaigns/${campaignId}`, data),
     getUserById: (userId) => api.get(`/users/${userId}`),
+    updateStatus: (campaignId, status) => api.patch(`/campaigns/${campaignId}`, { status }),
+    getCampaignsByStatus: (status) => api.get('/campaigns', { params: { status } }),
+    getAllUsers: () => api.get('/users'),
+    updateUserStatus: (userId, isSuspended) => api.patch(`/users/${userId}`, { is_suspended: isSuspended }),
+    getNotificationsByUser: (userId) => api.get('/notifications', { params: { user_id: userId } }),
+    markNotificationAsRead: (notifId) => api.patch(`/notifications/${notifId}`, { is_read: true }),
 }

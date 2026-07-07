@@ -11,17 +11,32 @@ import {
     Tooltip,
     Legend,
 } from 'chart.js'
+import Button from 'primevue/button'
+import { useToast } from 'vue-toastification'
+import { campaignService } from '@/services/campaignService'
+import dayjs from 'dayjs'
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend)
-import dayjs from 'dayjs'
 
 const CURRENT_CREATOR_ID = 1
 
 const { myCampaigns, isLoading, fetchDashboard, totalCollected, totalBackers, totalCampaigns } = useCreatorDashboard()
 
+const toast = useToast()
+
 onMounted(() => {
     fetchDashboard(CURRENT_CREATOR_ID)
 })
+
+async function submitForReview(campaignId) {
+    try {
+        await campaignService.updateStatus(campaignId, 'review')
+        toast.success('Kampanye berhasil disubmit untuk review')
+        fetchDashboard(CURRENT_CREATOR_ID)
+    } catch (error) {
+        toast.error('Gagal submit kampanye')
+    }
+}
 
 function formatCurrency(value) {
     return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(value)
@@ -37,6 +52,7 @@ function getStatusClass(status) {
         success: 'bg-blue-100 text-blue-700',
         failed: 'bg-red-100 text-red-700',
         draft: 'bg-gray-100 text-gray-700',
+        review: 'bg-yellow-100 text-yellow-700',
     }
     return map[status] || 'bg-gray-100 text-gray-700'
 }
@@ -106,24 +122,28 @@ const chartOptions = {
                     <h2 class="font-semibold mb-4">Kampanye Saya</h2>
                     <div v-if="myCampaigns.length === 0" class="text-gray-500">Kamu belum membuat kampanye.</div>
                     <div v-else class="flex flex-col gap-3">
-                        <router-link v-for="c in myCampaigns" :key="c.id" :to="`/campaigns/${c.id}`"
-                            class="border rounded-lg p-4 hover:shadow-md transition-shadow">
-                            <div class="flex justify-between items-start mb-2">
-                                <h3 class="font-medium">{{ c.title }}</h3>
-                                <span class="text-xs font-medium px-2 py-1 rounded-full"
-                                    :class="getStatusClass(c.status)">
-                                    {{ c.status }}
-                                </span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2">
-                                <div class="bg-green-500 h-2 rounded-full" :style="{ width: getProgress(c) + '%' }">
+                        <div v-for="c in myCampaigns" :key="c.id" class="border rounded-lg p-4">
+                            <router-link :to="`/campaigns/${c.id}`" class="block hover:opacity-80 transition-opacity">
+                                <div class="flex justify-between items-start mb-2">
+                                    <h3 class="font-medium">{{ c.title }}</h3>
+                                    <span class="text-xs font-medium px-2 py-1 rounded-full"
+                                        :class="getStatusClass(c.status)">
+                                        {{ c.status }}
+                                    </span>
                                 </div>
-                            </div>
-                            <p class="text-sm text-gray-500 mt-1">
-                                {{ formatCurrency(c.collected_amount) }} / {{ formatCurrency(c.target_amount) }}
-                                ({{ getProgress(c) }}%)
-                            </p>
-                        </router-link>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-green-500 h-2 rounded-full" :style="{ width: getProgress(c) + '%' }">
+                                    </div>
+                                </div>
+                                <p class="text-sm text-gray-500 mt-1">
+                                    {{ formatCurrency(c.collected_amount) }} / {{ formatCurrency(c.target_amount) }}
+                                    ({{ getProgress(c) }}%)
+                                </p>
+                            </router-link>
+
+                            <Button v-if="c.status === 'draft'" label="Submit untuk Review" size="small"
+                                class="mt-3 w-full" @click="submitForReview(c.id)" />
+                        </div>
                     </div>
                 </div>
             </div>

@@ -6,6 +6,8 @@ import CampaignDetailPage from '@/pages/CampaignDetailPage.vue'
 import CreateCampaignPage from '@/pages/CreateCampaignPage.vue'
 import MyBackingsPage from '@/pages/MyBackingsPage.vue'
 import CreatorDashboardPage from '@/pages/CreatorDashboardPage.vue'
+import AdminApprovalPage from '@/pages/AdminApprovalPage.vue'
+import AdminUsersPage from '@/pages/AdminUsersPage.vue'
 
 const routes = [
     {
@@ -49,6 +51,16 @@ const routes = [
         path: '/dashboard/creator',
         name: 'creator-dashboard',
         component: CreatorDashboardPage,
+    },
+    {
+        path: '/admin/approval',
+        name: 'admin-approval',
+        component: AdminApprovalPage,
+    },
+    {
+        path: '/admin/users',
+        name: 'admin-users',
+        component: AdminUsersPage,
     },
 ]
 
