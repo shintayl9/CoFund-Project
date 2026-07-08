@@ -35,13 +35,17 @@ async function handleClickNotification(notif) {
 <template>
     <nav class="bg-white shadow-md px-6 py-3 sticky top-0 z-50">
         <div class="flex justify-between items-center">
-            <router-link to="/campaigns" class="font-bold text-lg text-green-600">CoFund</router-link>
+            <router-link to="/" class="font-bold text-lg text-green-600">CoFund</router-link>
 
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-5">
                 <router-link to="/campaigns"
                     class="hidden md:inline text-sm text-gray-600 hover:text-gray-900">Kampanye</router-link>
-                <router-link to="/my-backings"
+                <router-link v-if="authStore.user?.role === 'backer'" to="/my-backings"
                     class="hidden md:inline text-sm text-gray-600 hover:text-gray-900">Dashboard Saya</router-link>
+                <router-link v-if="authStore.user?.role === 'creator'" to="/dashboard/creator"
+                    class="hidden md:inline text-sm text-gray-600 hover:text-gray-900">
+                    Dashboard Creator
+                </router-link>
                 <router-link v-if="authStore.user?.role === 'creator'" to="/campaigns/create"
                     class="hidden md:inline text-sm text-gray-600 hover:text-gray-900">
                     Buat Kampanye
@@ -59,6 +63,7 @@ async function handleClickNotification(notif) {
                     Overview
                 </router-link>
 
+                <div class="hidden md:block w-px h-6 bg-gray-200"></div>
                 <button class="relative" @click="toggleNotifications">
                     <i class="pi pi-bell text-xl text-gray-600"></i>
                     <span v-if="unreadCount > 0"
@@ -74,6 +79,12 @@ async function handleClickNotification(notif) {
                 <div v-if="authStore.isLoggedIn" class="hidden md:flex items-center gap-2">
                     <span class="text-sm text-gray-600">{{ authStore.user.name }}</span>
                     <Button label="Logout" size="small" severity="secondary" @click="handleLogout" />
+                </div>
+                <div v-else class="hidden md:flex items-center gap-2">
+                    <router-link to="/login" class="text-sm text-gray-600 hover:text-gray-900">Masuk</router-link>
+                    <router-link to="/register">
+                        <Button label="Daftar" size="small" severity="success" />
+                    </router-link>
                 </div>
 
                 <OverlayPanel ref="overlayPanel" class="w-80">
@@ -93,8 +104,13 @@ async function handleClickNotification(notif) {
         <div v-if="showMobileMenu" class="md:hidden flex flex-col gap-2 mt-3 pt-3 border-t">
             <router-link to="/campaigns" class="text-sm text-gray-600 py-1"
                 @click="showMobileMenu = false">Kampanye</router-link>
-            <router-link to="/my-backings" class="text-sm text-gray-600 py-1" @click="showMobileMenu = false">Dashboard
+            <router-link v-if="authStore.user?.role === 'backer'" to="/my-backings" class="text-sm text-gray-600 py-1"
+                @click="showMobileMenu = false">Dashboard
                 Saya</router-link>
+            <router-link v-if="authStore.user?.role === 'creator'" to="/dashboard/creator"
+                class="text-sm text-gray-600 py-1" @click="showMobileMenu = false">
+                Dashboard Creator
+            </router-link>
             <router-link v-if="authStore.user?.role === 'creator'" to="/campaigns/create"
                 class="text-sm text-gray-600 py-1" @click="showMobileMenu = false">
                 Buat Kampanye
@@ -111,6 +127,16 @@ async function handleClickNotification(notif) {
                 @click="showMobileMenu = false">
                 Overview
             </router-link>
+            <div v-if="authStore.isLoggedIn" class="flex items-center justify-between pt-2">
+                <span class="text-sm text-gray-600">{{ authStore.user.name }}</span>
+                <Button label="Logout" size="small" severity="secondary" @click="handleLogout" />
+            </div>
+            <template v-if="!authStore.isLoggedIn">
+                <router-link to="/login" class="text-sm text-gray-600 py-1"
+                    @click="showMobileMenu = false">Masuk</router-link>
+                <router-link to="/register" class="text-sm text-gray-600 py-1"
+                    @click="showMobileMenu = false">Daftar</router-link>
+            </template>
         </div>
     </nav>
 </template>

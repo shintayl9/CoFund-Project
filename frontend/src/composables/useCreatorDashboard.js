@@ -1,5 +1,6 @@
 import { ref, computed } from 'vue'
 import { campaignService } from '@/services/campaignService'
+import { backingService } from '@/services/backingService'
 
 export function useCreatorDashboard() {
     const myCampaigns = ref([])
@@ -13,7 +14,7 @@ export function useCreatorDashboard() {
             myCampaigns.value = campaignsRes.data
 
             const backingsPerCampaign = await Promise.all(
-                myCampaigns.value.map((c) => campaignService.getBackingsByCampaign(c.id))
+                myCampaigns.value.map((c) => backingService.getByCampaign(c.id))
             )
             allBackings.value = backingsPerCampaign.flatMap((res) => res.data)
         } finally {

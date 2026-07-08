@@ -2,7 +2,7 @@
 import { useAuthStore } from '@/stores/useAuthStore'
 import Textarea from 'primevue/textarea'
 import { onMounted, ref, computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useCampaign } from '@/composables/useCampaign'
 import { useToast } from 'vue-toastification'
 import dayjs from 'dayjs'
@@ -11,9 +11,12 @@ import Dialog from 'primevue/dialog'
 import RadioButton from 'primevue/radiobutton'
 import InputNumber from 'primevue/inputnumber'
 import { campaignService } from '@/services/campaignService'
+import { backingService } from '@/services/backingService'
+import { tierService } from '@/services/tierService'
 import Skeleton from 'primevue/skeleton'
 
 const route = useRoute()
+const router = useRouter()
 const authStore = useAuthStore()
 const {
     campaign, tiers, backings, users, updates, isLoading,
@@ -27,6 +30,12 @@ const customAmount = ref(0)
 const toast = useToast()
 
 const isOwner = computed(() => campaign.value?.creator_id === authStore.user?.id)
+const canBack = computed(() => {
+    if (!authStore.isLoggedIn) return false
+    if (authStore.user.role === 'admin') return false
+    if (isOwner.value) return false
+    return true
+})
 
 const showUpdateDialog = ref(false)
 const updateMessage = ref('')
@@ -83,7 +92,7 @@ async function confirmBacking() {
         const amount = getBackingAmount()
         const tier = backingMode.value === 'tier' ? getSelectedTier() : null
 
-        await campaignService.createBacking({
+        await backingService.create({
             campaign_id: campaign.value.id,
             user_id: authStore.user.id,
             tier_id: tier ? tier.id : null,
@@ -98,7 +107,7 @@ async function confirmBacking() {
         campaign.value.collected_amount = newAmount
 
         if (tier) {
-            await campaignService.updateTierQuota(tier.id, {
+            await tierService.updateQuota(tier.id, {
                 remaining_quota: tier.remaining_quota - 1,
             })
         }
@@ -192,7 +201,9 @@ function getUserName(userId) {
             </div>
 
             <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-                <Button label="Dukung Kampanye Ini" class="w-full mb-6" @click="openBackingDialog" />
+                <Button v-if="canBack" label="Dukung Kampanye Ini" class="w-full mb-6" @click="openBackingDialog" />
+                <Button v-else-if="!authStore.isLoggedIn" label="Login untuk Mendukung" class="w-full mb-6"
+                    severity="secondary" @click="router.push('/login')" />
                 <h2 class="text-xl font-semibold mb-4">Pilihan Tier</h2>
                 <div v-if="tiers.length === 0" class="text-gray-500">Belum ada tier untuk kampanye ini.</div>
                 <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -201,7 +212,7 @@ function getUserName(userId) {
                         <p class="text-sm text-gray-500 mt-1">{{ tier.description }}</p>
                         <p class="text-sm font-medium mt-2">Minimal {{ formatCurrency(tier.min_amount) }}</p>
                         <p class="text-xs text-gray-400 mt-1">
-                            Sisa kuota: {{ tier.remaining_quota }} / {{ tier.quota }}
+                            Terisi: {{ tier.quota - tier.remaining_quota }} / {{ tier.quota }}
                         </p>
                     </div>
                 </div>

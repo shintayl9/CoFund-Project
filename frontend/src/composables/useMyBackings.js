@@ -1,5 +1,7 @@
 import { ref } from 'vue'
 import { campaignService } from '@/services/campaignService'
+import { backingService } from '@/services/backingService'
+import { userService } from '@/services/userService'
 
 export function useMyBackings() {
     const myBackings = ref([])
@@ -10,8 +12,8 @@ export function useMyBackings() {
         isLoading.value = true
         try {
             const [backingsRes, userRes] = await Promise.all([
-                campaignService.getBackingsByUser(userId),
-                campaignService.getUserById(userId),
+                backingService.getByUser(userId),
+                userService.getById(userId),
             ])
 
             currentUser.value = userRes.data

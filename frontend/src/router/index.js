@@ -1,5 +1,6 @@
 import { useAuthStore } from '@/stores/useAuthStore'
 import { createRouter, createWebHistory } from 'vue-router'
+import HomePage from '@/pages/HomePage.vue'
 import LoginPage from '@/pages/LoginPage.vue'
 import RegisterPage from '@/pages/RegisterPage.vue'
 import CampaignListPage from '@/pages/CampaignListPage.vue'
@@ -12,6 +13,12 @@ import AdminUsersPage from '@/pages/AdminUsersPage.vue'
 import AdminOverviewPage from '@/pages/AdminOverviewPage.vue'
 
 const routes = [
+    {
+        path: '/',
+        name: 'home',
+        component: HomePage,
+        meta: { guestOnly: true },
+    },
     {
         path: '/login',
         name: 'login',
@@ -89,6 +96,8 @@ router.beforeEach((to, from, next) => {
         next('/login')
     } else if (to.meta.requiresAuth && !authStore.isLoggedIn) {
         next('/login')
+    } else if (to.meta.guestOnly && authStore.isLoggedIn) {
+        next('/campaigns')
     } else {
         next()
     }

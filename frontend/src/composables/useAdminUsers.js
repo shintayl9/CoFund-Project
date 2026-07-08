@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import { campaignService } from '@/services/campaignService'
+import { userService } from '@/services/userService'
 
 export function useAdminUsers() {
     const users = ref([])
@@ -8,15 +8,15 @@ export function useAdminUsers() {
     async function fetchUsers() {
         isLoading.value = true
         try {
-            const res = await campaignService.getAllUsers()
-            users.value = res.data
+            const res = await userService.getAll()
+            users.value = res.data.filter((u) => u.role !== 'admin')
         } finally {
             isLoading.value = false
         }
     }
 
     async function toggleSuspend(userId, currentStatus) {
-        await campaignService.updateUserStatus(userId, !currentStatus)
+        await userService.updateStatus(userId, !currentStatus)
         await fetchUsers()
     }
 

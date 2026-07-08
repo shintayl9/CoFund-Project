@@ -2,6 +2,7 @@
 import { useToast } from 'vue-toastification'
 import { useRouter } from 'vue-router'
 import { campaignService } from '@/services/campaignService'
+import { tierService } from '@/services/tierService'
 import { ref } from 'vue'
 import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
@@ -118,7 +119,7 @@ const onSubmit = handleSubmit(async (values) => {
 
         await Promise.all(
             tiers.value.map((tier) =>
-                campaignService.createTier({
+                tierService.create({
                     campaign_id: newCampaignId,
                     name: tier.name,
                     min_amount: tier.minAmount,

@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, ref, computed } from 'vue'
 import { useCampaign } from '@/composables/useCampaign'
-import dayjs from 'dayjs'
+import { getProgress, getDaysLeft, formatCurrency } from '@/utils/campaignFormatters'
 import InputText from 'primevue/inputtext'
 import Select from 'primevue/select'
 import Skeleton from 'primevue/skeleton'
@@ -41,15 +41,6 @@ onMounted(() => {
     fetchAll()
 })
 
-function getProgress(item) {
-    return Math.min(Math.round((item.collected_amount / item.target_amount) * 100), 100)
-}
-
-function getDaysLeft(deadline) {
-    const days = dayjs(deadline).diff(dayjs(), 'day')
-    return days > 0 ? `${days} hari lagi` : 'Berakhir'
-}
-
 function getStatusClass(status) {
     const map = {
         active: 'bg-green-100 text-green-700',
@@ -59,10 +50,6 @@ function getStatusClass(status) {
         draft: 'bg-gray-100 text-gray-700',
     }
     return map[status] || 'bg-gray-100 text-gray-700'
-}
-
-function formatCurrency(value) {
-    return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(value)
 }
 </script>
 
