@@ -9,6 +9,10 @@ export function getDaysLeft(deadline) {
     return days > 0 ? `${days} hari lagi` : 'Berakhir'
 }
 
+export function formatDeadline(deadline) {
+    return dayjs(deadline).format('DD MMMM YYYY')
+}
+
 export function formatCurrency(value) {
     return new Intl.NumberFormat('id-ID', {
         style: 'currency',

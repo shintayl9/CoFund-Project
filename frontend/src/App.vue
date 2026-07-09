@@ -8,9 +8,6 @@ const route = useRoute()
 const authStore = useAuthStore()
 const hideNavbarRoutes = ['login', 'register']
 
-onMounted(() => {
-  authStore.restoreSession()
-})
 </script>
 
 <template>

@@ -6,6 +6,7 @@ import RegisterPage from '@/pages/RegisterPage.vue'
 import CampaignListPage from '@/pages/CampaignListPage.vue'
 import CampaignDetailPage from '@/pages/CampaignDetailPage.vue'
 import CreateCampaignPage from '@/pages/CreateCampaignPage.vue'
+import EditCampaignPage from '@/pages/EditCampaignPage.vue'
 import MyBackingsPage from '@/pages/MyBackingsPage.vue'
 import CreatorDashboardPage from '@/pages/CreatorDashboardPage.vue'
 import AdminApprovalPage from '@/pages/AdminApprovalPage.vue'
@@ -38,6 +39,12 @@ const routes = [
         path: '/campaigns/create',
         name: 'campaign-create',
         component: CreateCampaignPage,
+        meta: { requiresAuth: true },
+    },
+    {
+        path: '/campaigns/:id/edit',
+        name: 'campaign-edit',
+        component: EditCampaignPage,
         meta: { requiresAuth: true },
     },
     {

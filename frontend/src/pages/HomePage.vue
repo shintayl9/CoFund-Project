@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, computed } from 'vue'
 import { useCampaign } from '@/composables/useCampaign'
-import { getProgress, getDaysLeft, formatCurrency } from '@/utils/campaignFormatters'
+import { getProgress, getDaysLeft, formatCurrency, formatDeadline } from '@/utils/campaignFormatters'
 import Skeleton from 'primevue/skeleton'
 import Button from 'primevue/button'
 
@@ -90,6 +90,7 @@ const featuredCampaigns = computed(() => publicCampaigns.value.slice(0, 6))
                                 <span>{{ getProgress(item) }}%</span>
                                 <span>{{ getDaysLeft(item.deadline) }}</span>
                             </div>
+                            <p class="text-xs text-gray-400 mt-1">Deadline: {{ formatDeadline(item.deadline) }}</p>
                             <p class="text-sm font-medium mt-1">
                                 {{ formatCurrency(item.collected_amount) }}
                                 <span class="text-gray-400 font-normal">/ {{ formatCurrency(item.target_amount)

@@ -42,7 +42,7 @@ async function handleReject() {
         return
     }
     try {
-        await rejectCampaign(rejectingCampaignId.value)
+        await rejectCampaign(rejectingCampaignId.value, rejectReason.value)
         toast.success('Kampanye ditolak dan dikembalikan ke creator')
         showRejectDialog.value = false
     } catch (error) {

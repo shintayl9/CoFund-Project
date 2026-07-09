@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, ref, computed } from 'vue'
 import { useCampaign } from '@/composables/useCampaign'
-import { getProgress, getDaysLeft, formatCurrency } from '@/utils/campaignFormatters'
+import { getProgress, getDaysLeft, formatCurrency, formatDeadline } from '@/utils/campaignFormatters'
 import InputText from 'primevue/inputtext'
 import Select from 'primevue/select'
 import Skeleton from 'primevue/skeleton'
@@ -30,10 +30,11 @@ const statusOptions = [
 
 const filteredCampaigns = computed(() => {
     return campaigns.value.filter((item) => {
+        const isPublic = item.status !== 'draft' && item.status !== 'review'
         const matchSearch = item.title.toLowerCase().includes(searchQuery.value.toLowerCase())
         const matchCategory = !selectedCategory.value || item.category_id === selectedCategory.value
         const matchStatus = !selectedStatus.value || item.status === selectedStatus.value
-        return matchSearch && matchCategory && matchStatus
+        return isPublic && matchSearch && matchCategory && matchStatus
     })
 })
 
@@ -105,6 +106,7 @@ function getStatusClass(status) {
                             <span>{{ getProgress(item) }}%</span>
                             <span>{{ getDaysLeft(item.deadline) }}</span>
                         </div>
+                        <p class="text-xs text-gray-400 mt-1">Deadline: {{ formatDeadline(item.deadline) }}</p>
                         <p class="text-sm font-medium mt-1">
                             {{ formatCurrency(item.collected_amount) }}
                             <span class="text-gray-400 font-normal">/ {{ formatCurrency(item.target_amount) }}</span>

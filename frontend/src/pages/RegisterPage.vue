@@ -56,7 +56,9 @@ const onSubmit = handleSubmit(async (values) => {
 <template>
   <div class="min-h-screen flex items-center justify-center bg-gray-50">
     <div class="p-8 bg-white rounded-lg shadow-md w-96">
-      <h1 class="text-2xl font-bold mb-6">Register</h1>
+      <router-link to="/" class="font-bold text-lg text-green-600 mb-4 block">CoFund</router-link>
+      <h1 class="text-2xl font-bold">Mulai Langkahmu di CoFund</h1>
+      <p class="text-sm text-gray-500 mb-6">Daftar sekarang dan jadi bagian dari gerakan pendanaan kolektif</p>
 
       <form @submit="onSubmit" class="flex flex-col gap-4">
         <div class="flex flex-col gap-1">

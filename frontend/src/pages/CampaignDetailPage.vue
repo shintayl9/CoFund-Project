@@ -38,6 +38,22 @@ const canBack = computed(() => {
 })
 
 const showUpdateDialog = ref(false)
+const showDeleteConfirm = ref(false)
+const isDeleting = ref(false)
+
+async function handleDelete() {
+    isDeleting.value = true
+    try {
+        await campaignService.delete(campaign.value.id)
+        toast.success('Kampanye berhasil dihapus')
+        router.push('/campaigns')
+    } catch (error) {
+        toast.error('Gagal menghapus kampanye')
+    } finally {
+        isDeleting.value = false
+        showDeleteConfirm.value = false
+    }
+}
 const updateMessage = ref('')
 
 async function handlePostUpdate() {
@@ -101,7 +117,7 @@ async function confirmBacking() {
         })
 
         const newAmount = campaign.value.collected_amount + amount
-        await campaignService.updateCampaignAmount(campaign.value.id, {
+        await campaignService.update(campaign.value.id, {
             collected_amount: newAmount,
         })
         campaign.value.collected_amount = newAmount
@@ -124,13 +140,20 @@ async function confirmBacking() {
     }
 }
 
-onMounted(() => {
+onMounted(async () => {
     const id = route.params.id
-    fetchOne(id)
+    await fetchOne(id)
     fetchTiers(id)
     fetchBackings(id)
     fetchUsers()
     fetchUpdates(id)
+
+    const isRestricted = campaign.value?.status === 'draft' || campaign.value?.status === 'review'
+    const isAllowed = isOwner.value || authStore.user?.role === 'admin'
+    if (isRestricted && !isAllowed) {
+        toast.error('Kampanye ini belum tersedia untuk publik')
+        router.push('/campaigns')
+    }
 })
 
 function getProgress() {
@@ -142,6 +165,11 @@ function getDaysLeft() {
     if (!campaign.value) return ''
     const days = dayjs(campaign.value.deadline).diff(dayjs(), 'day')
     return days > 0 ? `${days} hari lagi` : 'Berakhir'
+}
+
+function formatDeadline() {
+    if (!campaign.value) return ''
+    return dayjs(campaign.value.deadline).format('DD MMMM YYYY')
 }
 
 function formatCurrency(value) {
@@ -180,10 +208,21 @@ function getUserName(userId) {
 
             <div class="flex justify-between items-start gap-4 mb-2">
                 <h1 class="text-3xl font-bold">{{ campaign.title }}</h1>
-                <Button v-if="isOwner && campaign.status === 'active'" label="Post Update" size="small"
-                    severity="secondary" @click="showUpdateDialog = true" />
+                <div class="flex gap-2">
+                    <Button v-if="isOwner && campaign.status === 'draft'" label="Edit Kampanye" size="small"
+                        severity="secondary" @click="router.push(`/campaigns/${campaign.id}/edit`)" />
+                    <Button v-if="isOwner && campaign.status === 'draft'" label="Hapus Kampanye" size="small"
+                        severity="danger" @click="showDeleteConfirm = true" />
+                    <Button v-if="isOwner && campaign.status === 'active'" label="Post Update" size="small"
+                        severity="secondary" @click="showUpdateDialog = true" />
+                </div>
             </div>
             <p class="text-gray-600 mb-6">{{ campaign.description }}</p>
+            <div v-if="isOwner && campaign.status === 'draft' && campaign.rejection_note"
+                class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+                <p class="text-sm font-medium text-red-700">Kampanye ini ditolak admin</p>
+                <p class="text-sm text-red-600 mt-1">{{ campaign.rejection_note }}</p>
+            </div>
 
             <div class="bg-white rounded-lg shadow-md p-6 mb-6">
                 <div class="w-full bg-gray-200 rounded-full h-3">
@@ -193,6 +232,7 @@ function getUserName(userId) {
                     <span>{{ getProgress() }}% tercapai</span>
                     <span>{{ getDaysLeft() }}</span>
                 </div>
+                <p class="text-sm text-gray-500 mt-1">Deadline: {{ formatDeadline() }}</p>
                 <p class="text-xl font-semibold mt-2">
                     {{ formatCurrency(campaign.collected_amount) }}
                     <span class="text-gray-400 font-normal text-base">/ target {{ formatCurrency(campaign.target_amount)
@@ -320,6 +360,18 @@ function getUserName(userId) {
             <div class="flex justify-end gap-2 mt-2">
                 <Button label="Batal" severity="secondary" @click="showUpdateDialog = false" />
                 <Button label="Posting" @click="handlePostUpdate" />
+            </div>
+        </div>
+    </Dialog>
+    <Dialog v-model:visible="showDeleteConfirm" header="Hapus Kampanye?" modal class="w-full max-w-md">
+        <div class="flex flex-col gap-4">
+            <p class="text-gray-600">
+                Kampanye <strong>"{{ campaign?.title }}"</strong> akan dihapus permanen dan tidak bisa dikembalikan.
+                Yakin mau lanjut?
+            </p>
+            <div class="flex justify-end gap-2">
+                <Button label="Batal" severity="secondary" :disabled="isDeleting" @click="showDeleteConfirm = false" />
+                <Button label="Ya, Hapus" severity="danger" :loading="isDeleting" @click="handleDelete" />
             </div>
         </div>
     </Dialog>

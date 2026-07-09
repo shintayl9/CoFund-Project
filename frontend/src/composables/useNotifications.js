@@ -1,13 +1,14 @@
 import { ref, computed } from 'vue'
+import { useAuthStore } from '@/stores/useAuthStore'
 import { notifService } from '@/services/notifService'
 
-const CURRENT_USER_ID = 2 // sementara hardcode, nanti diganti dari sistem auth
-
 export function useNotifications() {
+    const authStore = useAuthStore()
     const notifications = ref([])
 
     async function fetchNotifications() {
-        const res = await notifService.getByUser(CURRENT_USER_ID)
+        if (!authStore.user) return
+        const res = await notifService.getByUser(authStore.user.id)
         notifications.value = res.data
     }
 

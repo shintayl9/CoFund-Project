@@ -31,7 +31,7 @@ onMounted(() => {
 
 async function submitForReview(campaignId) {
     try {
-        await campaignService.updateStatus(campaignId, 'review')
+        await campaignService.update(campaignId, { status: 'review', rejection_note: null })
         toast.success('Kampanye berhasil disubmit untuk review')
         fetchDashboard(authStore.user.id)
     } catch (error) {

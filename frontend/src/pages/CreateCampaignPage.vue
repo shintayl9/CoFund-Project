@@ -2,6 +2,7 @@
 import { useToast } from 'vue-toastification'
 import { useRouter } from 'vue-router'
 import { campaignService } from '@/services/campaignService'
+import { useAuthStore } from '@/stores/useAuthStore'
 import { tierService } from '@/services/tierService'
 import { ref } from 'vue'
 import { useForm, useField } from 'vee-validate'
@@ -88,6 +89,7 @@ function goToStep4() {
 const toast = useToast()
 const router = useRouter()
 const isSubmitting = ref(false)
+const authStore = useAuthStore()
 
 function formatDateForSubmit(date) {
     return dayjs(date).format('YYYY-MM-DD')
@@ -111,7 +113,7 @@ const onSubmit = handleSubmit(async (values) => {
             deadline: formatDateForSubmit(values.deadline),
             status: 'draft',
             category_id: values.categoryId,
-            creator_id: 1,
+            creator_id: authStore.user.id,
             image: values.image,
         })
 
