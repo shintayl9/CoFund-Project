@@ -36,6 +36,17 @@ const canBack = computed(() => {
     if (!authStore.isLoggedIn) return false
     if (authStore.user.role === 'admin') return false
     if (isOwner.value) return false
+
+    if (!campaign.value) return false
+
+    if (campaign.value.status !== 'active') return false
+
+    // target sudah tercapai
+    if (campaign.value.collected_amount >= campaign.value.target_amount) return false
+
+    // deadline lewat
+    if (dayjs(campaign.value.deadline).isBefore(dayjs(), 'day')) return false
+
     return true
 })
 
@@ -165,6 +176,10 @@ function proceedToConfirm() {
 }
 
 async function confirmBacking() {
+    if (!canBack.value) {
+        toast.error('Kampanye ini sudah tidak dapat didukung')
+        return
+    }
     isProcessingPayment.value = true
     try {
         const amount = getBackingAmount()
@@ -181,8 +196,15 @@ async function confirmBacking() {
         const newAmount = campaign.value.collected_amount + amount
         await campaignService.update(campaign.value.id, {
             collected_amount: newAmount,
+            status:
+                newAmount >= campaign.value.target_amount
+                    ? 'success'
+                    : campaign.value.status,
         })
         campaign.value.collected_amount = newAmount
+        if (newAmount >= campaign.value.target_amount) {
+            campaign.value.status = 'success'
+        }
 
         if (tier) {
             await tierService.updateQuota(tier.id, {
@@ -311,7 +333,7 @@ function getUserName(userId) {
                 <p class="text-xl font-semibold mt-2">
                     {{ formatCurrency(campaign.collected_amount) }}
                     <span class="text-gray-400 font-normal text-base">/ target {{ formatCurrency(campaign.target_amount)
-                        }}</span>
+                    }}</span>
                 </p>
             </div>
 

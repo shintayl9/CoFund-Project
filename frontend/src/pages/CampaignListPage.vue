@@ -30,7 +30,9 @@ const statusOptions = [
 
 const filteredCampaigns = computed(() => {
     return campaigns.value.filter((item) => {
-        const isPublic = item.status !== 'draft' && item.status !== 'review'
+        const isPublic =
+            item.status === 'active' ||
+            item.status === 'success'
         const matchSearch = item.title.toLowerCase().includes(searchQuery.value.toLowerCase())
         const matchCategory = !selectedCategory.value || item.category_id === selectedCategory.value
         const matchStatus = !selectedStatus.value || item.status === selectedStatus.value

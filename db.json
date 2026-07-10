@@ -32,9 +32,9 @@
       "slug": "kopi-robusta-petani-lokal",
       "description": "Mendukung petani kopi lokal dengan membeli hasil panen langsung tanpa perantara, kualitas premium harga bersahabat.",
       "target_amount": 3000000,
-      "collected_amount": 1850000,
+      "collected_amount": 3000000,
       "deadline": "2026-08-01",
-      "status": "active",
+      "status": "success",
       "category_id": 1,
       "creator_id": 1,
       "image": "https://placehold.co/600x400?text=Kopi+Robusta"
@@ -435,6 +435,14 @@
       "amount": 200000,
       "status": "completed",
       "id": 20
+    },
+    {
+      "campaign_id": 3,
+      "user_id": 2,
+      "tier_id": null,
+      "amount": 1150000,
+      "status": "completed",
+      "id": 21
     }
   ],
   "users": [
