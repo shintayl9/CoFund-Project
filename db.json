@@ -8,7 +8,7 @@
       "target_amount": 5000000,
       "collected_amount": 5000000,
       "deadline": "2026-08-15",
-      "status": "active",
+      "status": "failed",
       "category_id": 2,
       "creator_id": 1,
       "image": "https://placehold.co/600x400?text=EcoBag"
@@ -72,11 +72,13 @@
       "target_amount": 50000000,
       "collected_amount": 10500000,
       "deadline": "2026-08-31",
-      "status": "active",
+      "status": "failed",
       "category_id": 1,
       "creator_id": 1,
       "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQakoIEILRX4MRiRSBC_iJjGyT816bcEqyW7q0SbKnoSg&s=10",
-      "id": 6
+      "id": 6,
+      "cancellation_requested": false,
+      "cancellation_reason": "Banyak pertimbangan."
     },
     {
       "title": "GoJek – “Pesan dari Rumah”",
@@ -102,7 +104,9 @@
       "category_id": 3,
       "creator_id": 1,
       "image": "https://yt3.googleusercontent.com/EdaungG4BCb8NeGJJQoNhOB-dELBEqQSfrMDJwN8RGxIEusqNO5nuF2w_HZNnjhRaFFra90QAoA=s900-c-k-c0x00ffffff-no-rj",
-      "id": 8
+      "id": 8,
+      "cancellation_requested": true,
+      "cancellation_reason": "Y"
     },
     {
       "title": "Lomba Agustus",
@@ -110,19 +114,21 @@
       "description": "Lomba Agustusan 2026",
       "target_amount": 2500000,
       "collected_amount": 1000000,
-      "deadline": "2026-07-31",
+      "deadline": "2026-08-07",
       "status": "active",
       "category_id": 2,
       "creator_id": 1,
       "image": "https://rricoid-assets.obs.ap-southeast-4.myhuaweicloud.com/berita/Jember/o/1723538917174-asal-usul-lomba-17-agustus-di-in-20230802095318/9jjmfp7j3u4r6if.jpeg",
-      "id": 9
+      "id": 9,
+      "cancellation_requested": false,
+      "cancellation_reason": "Masih akan didiskusikan dengan panitia."
     },
     {
       "title": "Pembangunan Jalan Rusak",
       "slug": "pembangunan-jalan-rusak",
       "description": "Open Donasi Pembangunan Jalan Rusak di Kecamatan Jember.",
       "target_amount": 50000000,
-      "collected_amount": 10000000,
+      "collected_amount": 10200000,
       "deadline": "2026-09-18",
       "status": "active",
       "category_id": 2,
@@ -246,7 +252,7 @@
       "name": "Sembako",
       "min_amount": 200000,
       "quota": 15,
-      "remaining_quota": 15,
+      "remaining_quota": 14,
       "description": "Mendapatkan sembako minimal donasi Rp 200.000, kurang dari itu bisa donasi tapi tidak mendapatkan tier.",
       "id": 11
     },
@@ -276,7 +282,7 @@
       "user_id": 2,
       "tier_id": 1,
       "amount": 50000,
-      "status": "completed"
+      "status": "refunded"
     },
     {
       "id": 2,
@@ -284,7 +290,7 @@
       "user_id": 3,
       "tier_id": 2,
       "amount": 150000,
-      "status": "completed"
+      "status": "refunded"
     },
     {
       "id": 3,
@@ -299,7 +305,7 @@
       "user_id": 2,
       "tier_id": 2,
       "amount": 150000,
-      "status": "completed",
+      "status": "refunded",
       "id": 4
     },
     {
@@ -347,7 +353,7 @@
       "user_id": 2,
       "tier_id": 5,
       "amount": 500000,
-      "status": "completed",
+      "status": "refunded",
       "id": 10
     },
     {
@@ -371,7 +377,7 @@
       "user_id": 2,
       "tier_id": null,
       "amount": 10000000,
-      "status": "completed",
+      "status": "refunded",
       "id": 13
     },
     {
@@ -387,7 +393,7 @@
       "user_id": 1,
       "tier_id": null,
       "amount": 1800000,
-      "status": "completed",
+      "status": "refunded",
       "id": 15
     },
     {
@@ -421,6 +427,14 @@
       "amount": 10000000,
       "status": "completed",
       "id": 19
+    },
+    {
+      "campaign_id": 10,
+      "user_id": 2,
+      "tier_id": 11,
+      "amount": 200000,
+      "status": "completed",
+      "id": 20
     }
   ],
   "users": [
@@ -430,7 +444,7 @@
       "email": "budi@mail.com",
       "password": "password123",
       "role": "creator",
-      "balance": 0,
+      "balance": 1800000,
       "is_suspended": false
     },
     {
@@ -439,7 +453,7 @@
       "email": "alice@mail.com",
       "password": "password123",
       "role": "backer",
-      "balance": 0,
+      "balance": 10650000,
       "is_suspended": false
     },
     {
@@ -448,7 +462,7 @@
       "email": "citra@mail.com",
       "password": "password123",
       "role": "backer",
-      "balance": 0,
+      "balance": 150000,
       "is_suspended": false
     },
     {
@@ -528,6 +542,62 @@
       "is_read": true,
       "created_at": "2026-07-09",
       "id": 7
+    },
+    {
+      "user_id": 2,
+      "message": "Kampanye 'EcoBag — Tas Daur Ulang' gagal, dana kamu sebesar Rp 50.000 telah dikembalikan",
+      "is_read": true,
+      "created_at": "2026-07-10",
+      "id": 8
+    },
+    {
+      "user_id": 3,
+      "message": "Kampanye 'EcoBag — Tas Daur Ulang' gagal, dana kamu sebesar Rp 150.000 telah dikembalikan",
+      "is_read": false,
+      "created_at": "2026-07-10",
+      "id": 9
+    },
+    {
+      "user_id": 2,
+      "message": "Kampanye 'EcoBag — Tas Daur Ulang' gagal, dana kamu sebesar Rp 150.000 telah dikembalikan",
+      "is_read": true,
+      "created_at": "2026-07-10",
+      "id": 10
+    },
+    {
+      "user_id": 1,
+      "message": "Kampanye 'EcoBag — Tas Daur Ulang' gagal, dana kamu sebesar Rp 1.800.000 telah dikembalikan",
+      "is_read": true,
+      "created_at": "2026-07-10",
+      "id": 11
+    },
+    {
+      "user_id": 2,
+      "message": "Kampanye 'Indomie – “Gak Ada Lawan”' dibatalkan, dana kamu sebesar 500000 telah dikembalikan",
+      "is_read": true,
+      "created_at": "2026-07-10",
+      "id": 12
+    },
+    {
+      "user_id": 2,
+      "message": "Kampanye 'Indomie – “Gak Ada Lawan”' dibatalkan, dana kamu sebesar 10000000 telah dikembalikan",
+      "is_read": true,
+      "created_at": "2026-07-10",
+      "id": 13
+    },
+    {
+      "user_id": 1,
+      "message": "Permintaan pembatalan kampanye 'Indomie – “Gak Ada Lawan”' telah disetujui admin. Dana backer sudah dikembalikan",
+      "is_read": true,
+      "created_at": "2026-07-10",
+      "id": 14
+    },
+    {
+      "user_id": 1,
+      "message": "Permintaan pembatalan kampanye 'Lomba Agustus' ditolak, deadline diperpanjang hingga 2026-08-07",
+      "is_read": true,
+      "created_at": "2026-07-10",
+      "id": 15
     }
   ],
   "campaign_updates": [

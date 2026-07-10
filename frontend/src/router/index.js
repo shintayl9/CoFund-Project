@@ -2,6 +2,7 @@ import { useAuthStore } from '@/stores/useAuthStore'
 import { createRouter, createWebHistory } from 'vue-router'
 import HomePage from '@/pages/HomePage.vue'
 import LoginPage from '@/pages/LoginPage.vue'
+import ForgotPasswordPage from '@/pages/ForgotPasswordPage.vue'
 import RegisterPage from '@/pages/RegisterPage.vue'
 import CampaignListPage from '@/pages/CampaignListPage.vue'
 import CampaignDetailPage from '@/pages/CampaignDetailPage.vue'
@@ -24,6 +25,11 @@ const routes = [
         path: '/login',
         name: 'login',
         component: LoginPage,
+    },
+    {
+        path: '/forgot-password',
+        name: 'forgot-password',
+        component: ForgotPasswordPage,
     },
     {
         path: '/register',

@@ -13,6 +13,8 @@ import InputNumber from 'primevue/inputnumber'
 import { campaignService } from '@/services/campaignService'
 import { backingService } from '@/services/backingService'
 import { tierService } from '@/services/tierService'
+import { userService } from '@/services/userService'
+import { notifService } from '@/services/notifService'
 import Skeleton from 'primevue/skeleton'
 
 const route = useRoute()
@@ -40,6 +42,66 @@ const canBack = computed(() => {
 const showUpdateDialog = ref(false)
 const showDeleteConfirm = ref(false)
 const isDeleting = ref(false)
+const showRefundConfirm = ref(false)
+const isRefunding = ref(false)
+
+async function handleRefund() {
+    isRefunding.value = true
+    try {
+        await campaignService.update(campaign.value.id, { status: 'failed' })
+
+        const completedBackings = backings.value.filter((b) => b.status === 'completed')
+        for (const backing of completedBackings) {
+            const backer = users.value.find((u) => u.id === backing.user_id)
+            if (backer) {
+                await userService.update(backer.id, { balance: (backer.balance || 0) + backing.amount })
+            }
+            await backingService.update(backing.id, { status: 'refunded' })
+            await notifService.create({
+                user_id: backing.user_id,
+                message: `Kampanye '${campaign.value.title}' gagal, dana kamu sebesar ${formatCurrency(backing.amount)} telah dikembalikan`,
+                is_read: false,
+                created_at: dayjs().format('YYYY-MM-DD'),
+            })
+        }
+
+        toast.success('Kampanye digagalkan dan semua backer telah direfund')
+        showRefundConfirm.value = false
+        await fetchOne(campaign.value.id)
+        await fetchBackings(campaign.value.id)
+    } catch (error) {
+        toast.error('Gagal memproses refund')
+    } finally {
+        isRefunding.value = false
+    }
+}
+
+const showCancellationDialog = ref(false)
+const cancellationReason = ref('')
+const isSubmittingCancellation = ref(false)
+
+async function handleCancellationRequest() {
+    if (!cancellationReason.value.trim()) {
+        toast.error('Alasan pembatalan wajib diisi')
+        return
+    }
+    isSubmittingCancellation.value = true
+    try {
+        await campaignService.update(campaign.value.id, {
+            cancellation_requested: true,
+            cancellation_reason: cancellationReason.value,
+        })
+        campaign.value.cancellation_requested = true
+        campaign.value.cancellation_reason = cancellationReason.value
+        toast.success('Permintaan pembatalan telah diajukan ke admin')
+        showCancellationDialog.value = false
+        cancellationReason.value = ''
+    } catch (error) {
+        toast.error('Gagal mengajukan pembatalan')
+    } finally {
+        isSubmittingCancellation.value = false
+    }
+}
 
 async function handleDelete() {
     isDeleting.value = true
@@ -216,6 +278,12 @@ function getUserName(userId) {
                         severity="danger" @click="showDeleteConfirm = true" />
                     <Button v-if="isOwner && campaign.status === 'active'" label="Post Update" size="small"
                         severity="secondary" @click="showUpdateDialog = true" />
+                    <Button v-if="isOwner && campaign.status === 'active' && !campaign.cancellation_requested"
+                        label="Ajukan Pembatalan" size="small" severity="danger"
+                        @click="showCancellationDialog = true" />
+                    <Button v-if="authStore.user?.role === 'admin' && campaign.status === 'active'"
+                        label="Gagalkan Kampanye (Refund)" size="small" severity="danger"
+                        @click="showRefundConfirm = true" />
                 </div>
             </div>
             <p class="text-gray-600 mb-6">{{ campaign.description }}</p>
@@ -223,6 +291,11 @@ function getUserName(userId) {
                 class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
                 <p class="text-sm font-medium text-red-700">Kampanye ini ditolak admin</p>
                 <p class="text-sm text-red-600 mt-1">{{ campaign.rejection_note }}</p>
+            </div>
+            <div v-if="isOwner && campaign.cancellation_requested"
+                class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+                <p class="text-sm font-medium text-yellow-700">Menunggu keputusan admin terkait pembatalan</p>
+                <p class="text-sm text-yellow-600 mt-1">Alasan: {{ campaign.cancellation_reason }}</p>
             </div>
 
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
@@ -238,7 +311,7 @@ function getUserName(userId) {
                 <p class="text-xl font-semibold mt-2">
                     {{ formatCurrency(campaign.collected_amount) }}
                     <span class="text-gray-400 font-normal text-base">/ target {{ formatCurrency(campaign.target_amount)
-                    }}</span>
+                        }}</span>
                 </p>
             </div>
 
@@ -384,6 +457,38 @@ function getUserName(userId) {
             <div class="flex justify-end gap-2">
                 <Button label="Batal" severity="secondary" :disabled="isDeleting" @click="showDeleteConfirm = false" />
                 <Button label="Ya, Hapus" severity="danger" :loading="isDeleting" @click="handleDelete" />
+            </div>
+        </div>
+    </Dialog>
+    <Dialog v-model:visible="showRefundConfirm" header="Gagalkan Kampanye & Refund Backer?" modal
+        class="w-full max-w-md">
+        <div class="flex flex-col gap-4">
+            <p class="text-gray-600">
+                Kampanye <strong>"{{ campaign?.title }}"</strong> akan digagalkan (status menjadi
+                <strong>failed</strong>),
+                dan seluruh dana dari <strong>{{backings.filter(b => b.status === 'completed').length}} backer</strong>
+                akan dikembalikan otomatis. Aksi ini tidak bisa dibatalkan.
+            </p>
+            <div class="flex justify-end gap-2">
+                <Button label="Batal" severity="secondary" :disabled="isRefunding" @click="showRefundConfirm = false" />
+                <Button label="Ya, Gagalkan & Refund" severity="danger" :loading="isRefunding" @click="handleRefund" />
+            </div>
+        </div>
+    </Dialog>
+    <Dialog v-model:visible="showCancellationDialog" header="Ajukan Pembatalan Kampanye" modal class="w-full max-w-md">
+        <div class="flex flex-col gap-3">
+            <p class="text-sm text-gray-600">
+                Permintaan ini akan dikirim ke admin untuk ditinjau. Admin bisa menyetujui pembatalan (dana
+                dikembalikan ke backer) atau memperpanjang deadline kampanye kamu.
+            </p>
+            <label class="text-sm font-medium">Alasan Pembatalan</label>
+            <Textarea v-model="cancellationReason" rows="4" placeholder="Jelaskan alasan kamu mengajukan pembatalan..."
+                class="w-full" />
+            <div class="flex justify-end gap-2 mt-2">
+                <Button label="Batal" severity="secondary" :disabled="isSubmittingCancellation"
+                    @click="showCancellationDialog = false" />
+                <Button label="Ajukan" severity="danger" :loading="isSubmittingCancellation"
+                    @click="handleCancellationRequest" />
             </div>
         </div>
     </Dialog>

@@ -71,7 +71,11 @@ const onSubmit = handleSubmit(async (values) => {
         </div>
 
         <div class="flex flex-col gap-1">
-          <label for="password" class="text-sm font-medium">Password</label>
+          <div class="flex justify-between items-center">
+            <label for="password" class="text-sm font-medium">Password</label>
+            <router-link to="/forgot-password" class="text-xs text-green-600 hover:underline">Lupa
+              password?</router-link>
+          </div>
           <Password id="password" v-model="password" :feedback="false" toggleMask placeholder="Minimal 8 karakter"
             class="w-full" inputClass="w-full" autocomplete="current-password" />
           <small v-if="passwordError" class="text-red-500">{{

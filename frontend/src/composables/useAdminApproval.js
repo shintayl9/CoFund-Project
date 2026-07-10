@@ -1,10 +1,13 @@
 import { ref } from 'vue'
 import dayjs from 'dayjs'
 import { campaignService } from '@/services/campaignService'
+import { backingService } from '@/services/backingService'
+import { userService } from '@/services/userService'
 import { notifService } from '@/services/notifService'
 
 export function useAdminApproval() {
     const reviewCampaigns = ref([])
+    const cancellationRequests = ref([])
     const isLoading = ref(false)
 
     async function fetchReviewCampaigns() {
@@ -15,6 +18,11 @@ export function useAdminApproval() {
         } finally {
             isLoading.value = false
         }
+    }
+
+    async function fetchCancellationRequests() {
+        const res = await campaignService.getAll({ cancellation_requested: true })
+        cancellationRequests.value = res.data
     }
 
     async function approveCampaign(campaignId) {
@@ -45,5 +53,69 @@ export function useAdminApproval() {
         await fetchReviewCampaigns()
     }
 
-    return { reviewCampaigns, isLoading, fetchReviewCampaigns, approveCampaign, rejectCampaign }
+    async function approveCancellation(campaignId) {
+        const campaign = cancellationRequests.value.find((c) => c.id === campaignId)
+        if (!campaign) return
+
+        await campaignService.update(campaignId, {
+            status: 'failed',
+            cancellation_requested: false,
+        })
+
+        const backingsRes = await backingService.getByCampaign(campaignId)
+        const completedBackings = backingsRes.data.filter((b) => b.status === 'completed')
+
+        for (const backing of completedBackings) {
+            const userRes = await userService.getById(backing.user_id)
+            const backer = userRes.data
+            await userService.update(backer.id, { balance: (backer.balance || 0) + backing.amount })
+            await backingService.update(backing.id, { status: 'refunded' })
+            await notifService.create({
+                user_id: backing.user_id,
+                message: `Kampanye '${campaign.title}' dibatalkan, dana kamu sebesar ${backing.amount} telah dikembalikan`,
+                is_read: false,
+                created_at: dayjs().format('YYYY-MM-DD'),
+            })
+        }
+
+        await notifService.create({
+            user_id: campaign.creator_id,
+            message: `Permintaan pembatalan kampanye '${campaign.title}' telah disetujui admin. Dana backer sudah dikembalikan`,
+            is_read: false,
+            created_at: dayjs().format('YYYY-MM-DD'),
+        })
+
+        await fetchCancellationRequests()
+    }
+
+    async function extendDeadline(campaignId, newDeadline) {
+        const campaign = cancellationRequests.value.find((c) => c.id === campaignId)
+        if (!campaign) return
+
+        await campaignService.update(campaignId, {
+            deadline: newDeadline,
+            cancellation_requested: false,
+        })
+
+        await notifService.create({
+            user_id: campaign.creator_id,
+            message: `Permintaan pembatalan kampanye '${campaign.title}' ditolak, deadline diperpanjang hingga ${newDeadline}`,
+            is_read: false,
+            created_at: dayjs().format('YYYY-MM-DD'),
+        })
+
+        await fetchCancellationRequests()
+    }
+
+    return {
+        reviewCampaigns,
+        cancellationRequests,
+        isLoading,
+        fetchReviewCampaigns,
+        fetchCancellationRequests,
+        approveCampaign,
+        rejectCampaign,
+        approveCancellation,
+        extendDeadline,
+    }
 }
