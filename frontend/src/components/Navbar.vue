@@ -64,7 +64,7 @@ async function handleClickNotification(notif) {
                 </router-link>
 
                 <div class="hidden md:block w-px h-6 bg-gray-200"></div>
-                <button class="relative" @click="toggleNotifications">
+                <button v-if="authStore.isLoggedIn" class="relative" @click="toggleNotifications">
                     <i class="pi pi-bell text-xl text-gray-600"></i>
                     <span v-if="unreadCount > 0"
                         class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">

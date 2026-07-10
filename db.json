@@ -96,7 +96,7 @@
       "slug": "tokopedia-(\"selalu-ada-selalu-bisa\")",
       "description": "Kampanye pemasaran yang menggunakan penawaran promo, fitur baru, serta kolaborasi dengan figur publik untuk meningkatkan transaksi dan kesadaran merek.",
       "target_amount": 80000000,
-      "collected_amount": 0,
+      "collected_amount": 1000000,
       "deadline": "2026-08-31",
       "status": "active",
       "category_id": 3,
@@ -109,7 +109,7 @@
       "slug": "lomba-agustus",
       "description": "Lomba Agustusan 2026",
       "target_amount": 2500000,
-      "collected_amount": 0,
+      "collected_amount": 1000000,
       "deadline": "2026-07-31",
       "status": "active",
       "category_id": 2,
@@ -122,7 +122,7 @@
       "slug": "pembangunan-jalan-rusak",
       "description": "Open Donasi Pembangunan Jalan Rusak di Kecamatan Jember.",
       "target_amount": 50000000,
-      "collected_amount": 0,
+      "collected_amount": 10000000,
       "deadline": "2026-09-18",
       "status": "active",
       "category_id": 2,
@@ -397,6 +397,30 @@
       "amount": 800000,
       "status": "completed",
       "id": 16
+    },
+    {
+      "campaign_id": 8,
+      "user_id": 2,
+      "tier_id": null,
+      "amount": 1000000,
+      "status": "completed",
+      "id": 17
+    },
+    {
+      "campaign_id": 9,
+      "user_id": 2,
+      "tier_id": null,
+      "amount": 1000000,
+      "status": "completed",
+      "id": 18
+    },
+    {
+      "campaign_id": 10,
+      "user_id": 2,
+      "tier_id": null,
+      "amount": 10000000,
+      "status": "completed",
+      "id": 19
     }
   ],
   "users": [

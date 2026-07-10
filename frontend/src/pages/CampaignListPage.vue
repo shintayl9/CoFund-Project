@@ -85,34 +85,37 @@ function getStatusClass(status) {
 
         <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <router-link v-for="item in filteredCampaigns" :key="item.id" :to="`/campaigns/${item.id}`"
-                class="bg-white rounded-lg shadow-md overflow-hidden flex flex-col hover:shadow-lg transition-shadow">
-                <img :src="item.image" :alt="item.title" class="w-full h-40 object-cover" />
+                class="group bg-white rounded-xl shadow-md overflow-hidden flex flex-col border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                <div class="overflow-hidden">
+                    <img :src="item.image" :alt="item.title"
+                        class="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-500" </div>
 
-                <div class="p-4 flex flex-col flex-1">
-                    <span class="text-xs font-medium px-2 py-1 rounded-full w-fit mb-2"
-                        :class="getStatusClass(item.status)">
-                        {{ item.status }}
-                    </span>
+                    <div class="p-4 flex flex-col flex-1">
+                        <span class="text-xs font-semibold px-2.5 py-1 rounded-full w-fit mb-2 uppercase tracking-wide"
+                            :class="getStatusClass(item.status)">
+                            {{ item.status }}
+                        </span>
 
-                    <h2 class="font-semibold text-lg">{{ item.title }}</h2>
-                    <p class="text-sm text-gray-500 mt-1 line-clamp-2 flex-1">{{ item.description }}</p>
+                        <h2 class="font-semibold text-lg">{{ item.title }}</h2>
+                        <p class="text-sm text-gray-500 mt-1 line-clamp-2 flex-1">{{ item.description }}</p>
 
-                    <div class="mt-4">
-                        <div class="w-full bg-gray-200 rounded-full h-2">
-                            <div class="bg-green-500 h-2 rounded-full" :style="{ width: getProgress(item) + '%' }">
+                        <div class="mt-4">
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-green-500 h-2 rounded-full" :style="{ width: getProgress(item) + '%' }">
+                                </div>
                             </div>
+                            <div class="flex justify-between text-sm mt-1 text-gray-600">
+                                <span>{{ getProgress(item) }}%</span>
+                                <span>{{ getDaysLeft(item.deadline) }}</span>
+                            </div>
+                            <p class="text-xs text-gray-400 mt-1">Deadline: {{ formatDeadline(item.deadline) }}</p>
+                            <p class="text-sm font-medium mt-1">
+                                {{ formatCurrency(item.collected_amount) }}
+                                <span class="text-gray-400 font-normal">/ {{ formatCurrency(item.target_amount)
+                                    }}</span>
+                            </p>
                         </div>
-                        <div class="flex justify-between text-sm mt-1 text-gray-600">
-                            <span>{{ getProgress(item) }}%</span>
-                            <span>{{ getDaysLeft(item.deadline) }}</span>
-                        </div>
-                        <p class="text-xs text-gray-400 mt-1">Deadline: {{ formatDeadline(item.deadline) }}</p>
-                        <p class="text-sm font-medium mt-1">
-                            {{ formatCurrency(item.collected_amount) }}
-                            <span class="text-gray-400 font-normal">/ {{ formatCurrency(item.target_amount) }}</span>
-                        </p>
                     </div>
-                </div>
             </router-link>
         </div>
     </div>

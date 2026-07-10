@@ -204,7 +204,8 @@ function getUserName(userId) {
         </div>
 
         <div v-else-if="campaign" class="max-w-4xl mx-auto">
-            <img :src="campaign.image" :alt="campaign.title" class="w-full h-64 object-cover rounded-lg mb-6" />
+            <img :src="campaign.image" :alt="campaign.title"
+                class="w-full h-72 object-cover rounded-2xl shadow-lg mb-6" />
 
             <div class="flex justify-between items-start gap-4 mb-2">
                 <h1 class="text-3xl font-bold">{{ campaign.title }}</h1>
@@ -224,9 +225,10 @@ function getUserName(userId) {
                 <p class="text-sm text-red-600 mt-1">{{ campaign.rejection_note }}</p>
             </div>
 
-            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-                <div class="w-full bg-gray-200 rounded-full h-3">
-                    <div class="bg-green-500 h-3 rounded-full" :style="{ width: getProgress() + '%' }"></div>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
+                <div class="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
+                    <div class="bg-gradient-to-r from-green-400 to-green-600 h-3 rounded-full transition-all duration-500"
+                        :style="{ width: getProgress() + '%' }"></div>
                 </div>
                 <div class="flex justify-between text-sm mt-2 text-gray-600">
                     <span>{{ getProgress() }}% tercapai</span>
@@ -240,17 +242,19 @@ function getUserName(userId) {
                 </p>
             </div>
 
-            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
                 <Button v-if="canBack" label="Dukung Kampanye Ini" class="w-full mb-6" @click="openBackingDialog" />
                 <Button v-else-if="!authStore.isLoggedIn" label="Login untuk Mendukung" class="w-full mb-6"
                     severity="secondary" @click="router.push('/login')" />
                 <h2 class="text-xl font-semibold mb-4">Pilihan Tier</h2>
                 <div v-if="tiers.length === 0" class="text-gray-500">Belum ada tier untuk kampanye ini.</div>
                 <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div v-for="tier in tiers" :key="tier.id" class="border rounded-lg p-4">
+                    <div v-for="tier in tiers" :key="tier.id"
+                        class="border border-gray-200 rounded-lg p-4 hover:border-green-300 hover:shadow-sm transition-all">
                         <h3 class="font-semibold">{{ tier.name }}</h3>
                         <p class="text-sm text-gray-500 mt-1">{{ tier.description }}</p>
-                        <p class="text-sm font-medium mt-2">Minimal {{ formatCurrency(tier.min_amount) }}</p>
+                        <p class="text-sm font-medium mt-2 text-green-700">Minimal {{ formatCurrency(tier.min_amount) }}
+                        </p>
                         <p class="text-xs text-gray-400 mt-1">
                             Terisi: {{ tier.quota - tier.remaining_quota }} / {{ tier.quota }}
                         </p>
@@ -258,23 +262,31 @@ function getUserName(userId) {
                 </div>
             </div>
 
-            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
                 <h2 class="text-xl font-semibold mb-4">Update Kampanye</h2>
                 <div v-if="updates.length === 0" class="text-gray-500">Belum ada update dari creator.</div>
                 <ul v-else class="flex flex-col gap-3">
-                    <li v-for="update in updates" :key="update.id" class="border-l-4 border-green-500 pl-3">
+                    <li v-for="update in updates" :key="update.id"
+                        class="border-l-4 border-green-500 bg-green-50/50 rounded-r-lg pl-3 py-2">
                         <p class="text-sm text-gray-800">{{ update.message }}</p>
                         <p class="text-xs text-gray-400 mt-1">{{ update.created_at }}</p>
                     </li>
                 </ul>
             </div>
 
-            <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                 <h2 class="text-xl font-semibold mb-4">Daftar Backer</h2>
                 <div v-if="backings.length === 0" class="text-gray-500">Belum ada yang mendukung kampanye ini.</div>
-                <ul v-else class="divide-y">
-                    <li v-for="backing in backings" :key="backing.id" class="py-2 flex justify-between">
-                        <span>{{ getUserName(backing.user_id) }}</span>
+                <ul v-else class="divide-y divide-gray-100">
+                    <li v-for="backing in backings" :key="backing.id"
+                        class="py-3 flex justify-between items-center hover:bg-gray-50 -mx-2 px-2 rounded transition-colors">
+                        <span class="flex items-center gap-2">
+                            <span
+                                class="w-8 h-8 rounded-full bg-green-100 text-green-700 flex items-center justify-center text-xs font-semibold">
+                                {{ getUserName(backing.user_id).charAt(0).toUpperCase() }}
+                            </span>
+                            {{ getUserName(backing.user_id) }}
+                        </span>
                         <span class="font-medium">{{ formatCurrency(backing.amount) }}</span>
                     </li>
                 </ul>
